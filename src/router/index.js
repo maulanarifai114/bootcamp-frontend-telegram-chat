@@ -5,6 +5,9 @@ import VueRouter from 'vue-router'
 import Login from '../views/auth/Login.vue'
 import SignUp from '../views/auth/SignUp.vue'
 
+// Room Chat
+import Room from '../views/main/Room.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -22,6 +25,11 @@ const routes = [
     path: '/signup',
     name: 'SignUp',
     component: SignUp
+  },
+  {
+    path: '/room',
+    name: 'Room',
+    component: Room
   }
 
 ]

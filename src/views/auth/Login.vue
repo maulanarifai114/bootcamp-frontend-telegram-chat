@@ -6,14 +6,15 @@
       <div class="space"></div>
       <h2 class=" align-self-start">Hi, Welcome Back</h2>
       <div class="space"></div>
+      <!-- Form -->
       <form @submit.prevent="login">
         <!-- Email -->
         <label for="email" class=" align-self-start">Email</label>
-        <input type="email" id="email" v-model="email" required>
+        <input type="email" id="email" v-model="email" maxlength="64" required>
         <div class="space"></div>
         <!-- Password -->
         <label for="password" class=" align-self-start">Password</label>
-        <input type="password" id="password" v-model="password" required>
+        <input type="password" id="password" v-model="password" minlength="8" maxlength="64" required>
         <div class="space"></div>
         <!-- Forgot Password -->
         <h3 class=" align-self-end">Forgot Password</h3>
@@ -24,9 +25,9 @@
       </form>
       <!-- Text Muted -->
       <div class="d-flex w-100 align-items-center">
-        <div class="garis flex-grow-1"></div>
+        <div class="line-muted flex-grow-1"></div>
         <h4>Login with</h4>
-        <div class="garis flex-grow-1"></div>
+        <div class="line-muted flex-grow-1"></div>
       </div>
       <div class="space"></div>
       <!-- Button Google -->
@@ -56,6 +57,7 @@ export default {
       console.log(password)
       this.email = ''
       this.password = ''
+      this.$router.push('/room')
     },
     goSignup () {
       this.$router.push('/signup')
@@ -138,7 +140,7 @@ h5 {
   }
 }
 
-.garis {
+.line-muted {
   height: 1px;
   background-color: #848484;
 }
