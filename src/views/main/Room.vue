@@ -44,8 +44,63 @@
       </div>
     </section>
     <!-- Right Side -->
-    <section class="right-side">
-      <div class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div>
+    <section class="right-side position-relative">
+      <!-- Unselected Chat -->
+      <!-- <div class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div> -->
+      <!-- Selected Chat -->
+      <div class="room-chat w-100 h-100 d-flex flex-column position-absolute">
+        <!-- Header -->
+        <div class="header-chat d-flex">
+          <!-- Photo Profile -->
+          <div class="wrap-img">
+            <img src="../../assets/2.png" alt="photo">
+          </div>
+          <!-- Name and status -->
+          <div class="wrap-name-status d-flex flex-column justify-content-between ">
+            <div class="name">Mother</div>
+            <div class="status">Online</div>
+          </div>
+          <!-- Icon Menu -->
+          <div class="wrap-menu d-flex flex-grow-1 justify-content-end align-items-center">
+            <img src="../../assets/profile-menu.svg" alt="menu">
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="body-chat flex-grow-1 ">
+          <!-- Receiver -->
+          <div class="receiver w-100 d-flex">
+            <div class="wrap-img-chat d-flex align-items-end">
+              <div class="img-chat">
+                <img src="../../assets/2.png" alt="">
+              </div>
+            </div>
+            <div class="receiver-message">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente blanditiis rerum quaerat et natus, recusandae dolores ducimus tenetur possimus nihil perspiciatis dicta maxime veritatis nobis ullam, nostrum in fugit minima sequi error, reprehenderit porro dolor. Dolorem consequatur minus commodi rerum dolores rem voluptatum quia blanditiis? Doloremque odio, perspiciatis obcaecati vero vitae quae nemo natus repudiandae beatae repellendus sed quo neque laudantium, ex, impedit eos ad alias consequuntur maiores! Fugit quia deleniti doloribus temporibus necessitatibus quos. Pariatur necessitatibus, alias, ipsa vero quaerat laboriosam at quod praesentium magnam magni distinctio corporis! Unde consequatur accusamus rem blanditiis, a asperiores nesciunt repellendus neque hic.
+            </div>
+          </div>
+          <!-- Sender -->
+          <div class="sender w-100 d-flex justify-content-end">
+            <div class="sender-message">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo ipsam expedita commodi quaerat vitae, tempora ut optio soluta error veritatis officiis dolorem dolore repellat sit distinctio. Consectetur mollitia exercitationem impedit reiciendis neque enim. Expedita nulla voluptate, optio amet itaque in impedit sed quisquam harum. Possimus obcaecati optio neque modi facere rerum error ab minima voluptatum ullam cum cumque in architecto, quod tenetur eum eligendi quo aliquam. Deleniti odio quasi amet optio quos ratione repudiandae corporis cum ad exercitationem, dolore voluptates asperiores voluptas, nam inventore aliquam non. Temporibus in ipsam eveniet tenetur, numquam sapiente quam esse. Laboriosam quo quam nostrum officia.
+            </div>
+            <div class="wrap-img-chat">
+              <div class="img-chat">
+                <img src="../../assets/2.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Box Send Chat -->
+        <div class="wrap-send-chat">
+          <!-- Input Messages -->
+          <div class="wrap-input w-100 h-100 d-flex align-items-center">
+            <input type="text" placeholder="Type your message...">
+            <img src="../../assets/plus.svg" alt="plus">
+            <img src="../../assets/emoji.svg" alt="emoji">
+            <img src="../../assets/image.svg" alt="image">
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -122,6 +177,9 @@ export default {
   img {
     cursor: pointer;
   }
+  img:hover {
+    opacity: .8;
+  }
 }
 
 .title {
@@ -136,14 +194,19 @@ export default {
   cursor: pointer;
 }
 
+.title:hover {
+  opacity: .8;
+}
+
 // Search
 .wrap-search {
   margin: 0 0 25px 0;
-}
-
-.wrap-search img {
-  cursor: pointer;
-
+  img {
+    cursor: pointer;
+  }
+  img:hover {
+    opacity: .8;
+  }
 }
 
 .search {
@@ -172,6 +235,9 @@ export default {
 .wrap-tab {
   height: 50px;
   margin: 0 0 35px 0;
+  div:hover {
+    opacity: .8;
+  }
 }
 
 .tab-inactive {
@@ -195,7 +261,7 @@ export default {
   text-align: center;
   letter-spacing: -0.165px;
   color: #FFFFFF;
-  width: 133px;
+  width: fit-content;
   height: 100%;
   background: #7E98DF;
   border-radius: 20px;
@@ -203,12 +269,13 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  padding: 0 18px;
 }
 
 // Chat List
 .wrap-chat {
   overflow: auto;
-  padding: 0 27px 0 30px;
+  padding: 0 30px;
 }
 
 .chat-person {
@@ -246,13 +313,12 @@ export default {
   color: #232323;
 }
 
-.last-message {
+.last-message, .status {
   font-family: Rubik;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
-  text-align: center;
   letter-spacing: -0.165px;
   color: #7E98DF;
 }
@@ -291,6 +357,7 @@ export default {
   width: 1016px;
   height: 100vh;
   background: #FAFAFA;
+  border-left: 1px solid #E5E5E5;
 }
 
 .not-select {
@@ -301,6 +368,122 @@ export default {
   line-height: 28px;
   text-align: center;
   color: #848484;
+}
+
+.room-chat {
+  top: 0;
+}
+
+// Header
+.header-chat {
+  padding: 28px 50px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.wrap-name-status {
+  padding: 9px 0;
+}
+
+// Body
+.body-chat {
+  padding: 25px 50px 0 50px;
+  overflow: auto;
+}
+
+// Image Chat
+.wrap-img-chat {
+  .img-chat {
+    width: 54px;
+    height: 54px;
+    border-radius: 20px;
+    background-color: #dadada;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+}
+
+// Body Receiver
+.receiver {
+  // background-color: wheat;
+  margin: 0 0 15px 0;
+  .receiver-message {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 185.17%;
+    letter-spacing: -0.165px;
+    color: #FFFFFF;
+    max-width: 70%;
+    height: fit-content;
+    background: #7E98DF;
+    padding: 15px 30px;
+    border-radius: 35px 35px 35px 10px;
+    margin: 0 0 0 15px;
+  }
+}
+
+// Body Sender
+.sender {
+  margin: 0 0 15px 0;
+  .sender-message {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 185.17%;
+    letter-spacing: -0.165px;
+    color: #232323;
+    padding: 17px 30px;
+    background: #ffffff;
+    border-radius: 35px 10px 35px 35px;
+    max-width: 70%;
+    height: fit-content;
+    margin: 0 15px 0 0;
+  }
+}
+
+// Send Chat
+.wrap-send-chat {
+  height: 120px;
+  padding: 30px 50px;
+  background-color: white;
+  overflow: hidden;
+}
+
+.wrap-input {
+  // padding: 0 30px;
+  background: #FAFAFA;
+  border-radius: 15px;
+  input {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 176, 255, 0);
+    padding: 0 20px 0 30px;
+  }
+  input::placeholder {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.165px;
+    color: #848484;
+  }
+  img {
+    margin: 0 20px 0 0;
+  }
+}
+
+@media (min-width: 1367px) {
+
+  // Right Side
+  .right-side {
+    width: 100vw;
+  }
 }
 
 </style>
