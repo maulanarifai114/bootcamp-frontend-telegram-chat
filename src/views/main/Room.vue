@@ -27,7 +27,7 @@
         <div class="chat-person w-100 d-flex" v-for="(item, index) in array" :key="index">
           <!-- Image -->
           <div class="wrap-img">
-            <img src="../../assets/2.png" alt="profile">
+            <img src="../../assets/default.svg" alt="profile">
           </div>
           <!-- Name and Last Message -->
           <div class="wrap-name-message d-flex flex-column justify-content-between ">
@@ -36,24 +36,32 @@
           </div>
           <!-- Time and Count message -->
           <div class="wrap-time-count d-flex flex-column justify-content-between flex-grow-1 align-items-end">
+            <!-- Time -->
             <div class="time">15:20</div>
-            <div class="count d-flex justify-content-center align-items-center">999+</div>
+            <!-- Count Message Unread -->
+            <!-- <div class="count d-flex justify-content-center align-items-center">999+</div> -->
+            <!-- Icon Send -->
+            <img src="../../assets/send.svg" alt="unread">
+            <!-- Icon Unread -->
+            <!-- <img src="../../assets/unread.svg" alt="unread"> -->
+            <!-- Icon Read -->
+            <!-- <img src="../../assets/read.svg" alt="read"> -->
           </div>
         </div>
         <!-- End Per Person -->
       </div>
     </section>
     <!-- Right Side -->
-    <section class="right-side position-relative">
+    <section class="right-side">
       <!-- Unselected Chat -->
       <!-- <div class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div> -->
       <!-- Selected Chat -->
-      <div class="room-chat w-100 h-100 d-flex flex-column position-absolute">
+      <div class="room-chat w-100 h-100 d-flex flex-column">
         <!-- Header -->
         <div class="header-chat d-flex">
           <!-- Photo Profile -->
           <div class="wrap-img">
-            <img src="../../assets/2.png" alt="photo">
+            <img src="../../assets/default.svg" alt="photo">
           </div>
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between ">
@@ -71,7 +79,7 @@
           <div class="receiver w-100 d-flex">
             <div class="wrap-img-chat d-flex align-items-end">
               <div class="img-chat">
-                <img src="../../assets/2.png" alt="">
+                <img src="../../assets/default.svg" alt="">
               </div>
             </div>
             <div class="receiver-message">
@@ -85,7 +93,7 @@
             </div>
             <div class="wrap-img-chat">
               <div class="img-chat">
-                <img src="../../assets/2.png" alt="">
+                <img src="../../assets/default.svg" alt="">
               </div>
             </div>
           </div>
@@ -220,6 +228,7 @@ export default {
   input {
     width: 100%;
     background-color: rgba($color: #000000, $alpha: 0);
+    padding: 0 15px 0 0;
   }
   input::placeholder {
     font-family: Rubik;
@@ -420,7 +429,7 @@ export default {
     max-width: 70%;
     height: fit-content;
     background: #7E98DF;
-    padding: 15px 30px;
+    padding: 17px 30px;
     border-radius: 35px 35px 35px 10px;
     margin: 0 0 0 15px;
   }
@@ -480,9 +489,25 @@ export default {
 
 @media (min-width: 1367px) {
 
+  //  Left Side
+  .left-side {
+    width: 350px!important;
+  }
+
+  .wrap-search {
+    .search {
+      img {
+        margin: 0 10px 0 20px;
+      }
+    }
+    img {
+      margin: 0 0 0 20px;
+    }
+  }
+
   // Right Side
   .right-side {
-    width: 100vw;
+    width: 100%;
   }
 }
 
