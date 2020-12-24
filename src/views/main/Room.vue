@@ -1,11 +1,39 @@
 <template>
-  <div class="container-fluid d-flex">
+  <div class="container-fluid d-flex position-relative">
     <!-- Left Side -->
-    <section class="left-side d-flex flex-column">
+    <section class="left-side d-flex flex-column position-relative">
+      <!-- Menu After Click -->
+      <div class="menu position-absolute flex-column justify-content-between" :class="activeMenu === 1 ? 'd-flex':'d-none'">
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Settings</h2>
+          <img src="../../assets/settings.svg" alt="setting">
+        </div>
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Contacts</h2>
+          <img src="../../assets/contacts.svg" alt="setting">
+        </div>
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Calls</h2>
+          <img src="../../assets/phone.svg" alt="setting">
+        </div>
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Saved Messages</h2>
+          <img src="../../assets/saved.svg" alt="setting">
+        </div>
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Invite Friends</h2>
+          <img src="../../assets/invite.svg" alt="setting">
+        </div>
+        <div class="menu-select d-flex justify-content-between">
+          <h2 class=" align-self-center">Telegram FAQ</h2>
+          <img src="../../assets/faq.svg" alt="setting">
+        </div>
+      </div>
       <!-- Title -->
       <div class="wrap-title d-flex w-100 justify-content-between">
         <h1 class="title">Telegram</h1>
-        <img src="../../assets/menu.svg" alt="menu">
+        <!-- Menu -->
+        <img src="../../assets/menu.svg" alt="menu" @click="activateMenu">
       </div>
       <!-- Search -->
       <div class="wrap-search d-flex justify-content-between">
@@ -52,13 +80,15 @@
       </div>
     </section>
     <!-- Right Side -->
-    <section class="right-side">
+    <section class="right-side flex-grow-1 position-relative">
       <!-- Unselected Chat -->
       <!-- <div class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div> -->
+      <!-- Menu Chat -->
+      <!-- <div class="menu-profile position-absolute"></div> -->
       <!-- Selected Chat -->
-      <div class="room-chat w-100 h-100 d-flex flex-column">
+      <div class="room-chat h-100 d-flex flex-column">
         <!-- Header -->
-        <div class="header-chat d-flex">
+        <div class="header-chat d-flex" @click="activateProfile">
           <!-- Photo Profile -->
           <div class="wrap-img">
             <img src="../../assets/default.svg" alt="photo">
@@ -74,7 +104,7 @@
           </div>
         </div>
         <!-- Body -->
-        <div class="body-chat flex-grow-1 ">
+        <div class="body-chat ">
           <!-- Receiver -->
           <div class="receiver w-100 d-flex">
             <div class="wrap-img-chat d-flex align-items-end">
@@ -110,6 +140,41 @@
         </div>
       </div>
     </section>
+    <!-- Profile Friends -->
+    <section class="position-absolute d-flex flex-column" :class="activeProfileFriend === 1 ? 'profile-f-active':'profile-f-inactive'">
+      <!-- Username Friend -->
+      <div class="wrap-username d-flex w-100 justify-content-center align-items-center">
+        <img src="../../assets/back.svg" alt="back">
+        <div class="username-f">@mmldolg</div>
+      </div>
+      <!-- Photo Profile Friend -->
+      <div class="wrap-profile-f align-self-center">
+        <img src="../../assets/default.svg" alt="profile">
+      </div>
+      <!-- Name Friend -->
+      <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
+        <div class="name-status-f">
+          <div class="name-f">Mother</div>
+          <div class="status-f">Online</div>
+        </div>
+        <img src="../../assets/chat.svg" alt="chat">
+      </div>
+      <!-- Phone Number -->
+      <div class="wrap-phone-f">
+        <div class="text-phone">Phone number</div>
+        <div class="phone-number">+375(29)9239003</div>
+      </div>
+      <!-- Line -->
+      <div class="line-profile-f"></div>
+      <!-- Misc/Document Tab -->
+      <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
+        <div class="tab-active-f">Location</div>
+        <div class="tab-inactive-f">Images</div>
+        <div class="tab-inactive-f">Document</div>
+      </div>
+      <!-- Tab Location Friend-->
+      <div class="tab-location-f flex-grow-1"></div>
+    </section>
   </div>
 </template>
 
@@ -120,7 +185,9 @@ export default {
     return {
       search: '',
       tab: '',
-      array: [1, 2, 3, 4, 5, 6, 7, 8]
+      array: [1, 2, 3, 4, 5, 6, 7, 8],
+      activeMenu: 0,
+      activeProfileFriend: 1
     }
   },
   methods: {
@@ -128,6 +195,20 @@ export default {
       const search = this.search
       console.log('handleSearch ' + search)
       this.search = ''
+    },
+    activateMenu () {
+      if (this.activeMenu === 0) {
+        this.activeMenu++
+      } else if (this.activeMenu > 0) {
+        this.activeMenu--
+      }
+    },
+    activateProfile () {
+      if (this.activeProfileFriend === 0) {
+        this.activeProfileFriend++
+      } else if (this.activeProfileFriend > 0) {
+        this.activeProfileFriend--
+      }
     }
   }
 }
@@ -138,6 +219,7 @@ export default {
 .container-fluid {
   height: 100vh;
   padding: 0;
+  overflow: hidden;
 }
 
 // Left Side
@@ -206,6 +288,35 @@ export default {
   opacity: .8;
 }
 
+.menu {
+  width: 250px;
+  height: 360px;
+  right: 30px;
+  top: 75px;
+  background: #7E98DF;
+  border-radius: 35px 10px 35px 35px;
+  padding: 22px 30px;
+}
+
+.menu-select {
+  height: fit-content;
+  width: 100%;
+  cursor: pointer;
+  h2 {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.165px;
+    color: #FFFFFF;
+  }
+}
+
+.menu-select:hover {
+  opacity: .8;
+}
+
 // Search
 .wrap-search {
   margin: 0 0 25px 0;
@@ -214,6 +325,17 @@ export default {
   }
   img:hover {
     opacity: .8;
+  }
+}
+
+.wrap-search {
+  .search {
+    img {
+      margin: 0 10px 0 20px;
+    }
+  }
+  img {
+    margin: 0 0 0 20px;
   }
 }
 
@@ -363,7 +485,7 @@ export default {
 
 // Right Side
 .right-side {
-  width: 1016px;
+  // width: 100%;
   height: 100vh;
   background: #FAFAFA;
   border-left: 1px solid #E5E5E5;
@@ -388,14 +510,25 @@ export default {
   padding: 28px 50px;
   background-color: white;
   cursor: pointer;
+  height: 120px;
 }
 
 .wrap-name-status {
   padding: 9px 0;
 }
 
+.menu-profile {
+  top: 75px;
+  right: 50px;
+  width: 250px;
+  height: 268px;
+  background: #7E98DF;
+  border-radius: 35px 10px 35px 35px;
+}
+
 // Body
 .body-chat {
+  height: 100%;
   padding: 25px 50px 0 50px;
   overflow: auto;
 }
@@ -460,11 +593,11 @@ export default {
   height: 120px;
   padding: 30px 50px;
   background-color: white;
-  overflow: hidden;
 }
 
 .wrap-input {
   // padding: 0 30px;
+  height: 60px;
   background: #FAFAFA;
   border-radius: 15px;
   input {
@@ -485,6 +618,150 @@ export default {
   img {
     margin: 0 20px 0 0;
   }
+}
+
+// Friends Profile
+.profile-f-active {
+  width: 350px;
+  background-color: white;
+  right: 0;
+  height: 100vh;
+  top: 0;
+  border-left: 1px solid #E5E5E5;
+  padding: 45px 28px 0 28px;
+  overflow: auto;
+}
+
+.profile-f-inactive {
+  width: 350px;
+  background-color: white;
+  right: -350px;
+  height: 100vh;
+  top: 0;
+  border-left: 1px solid #E5E5E5;
+  padding: 45px 28px 0 28px;
+  overflow: auto;
+}
+
+.wrap-username {
+  cursor: pointer;
+  margin: 0 0 50px 0;
+  img {
+    margin: 0 25px 0 0;
+  }
+  .username-f {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #7E98DF;
+  }
+}
+
+.wrap-profile-f {
+  width: 82px;
+  height: 82px;
+  border-radius: 30px;
+  background-color: #dadada;
+  overflow: hidden;
+  margin: 0 0 25px 0;
+  img {
+    width: 100%;
+  }
+}
+
+.wrap-name-f {
+  img {
+    cursor: pointer;
+  }
+}
+
+.name-f {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 26px;
+  letter-spacing: -0.165px;
+  color: #232323;
+  margin: 0 0 7px 0;
+}
+
+.status-f {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 1.335px;
+  color: #232323;
+  margin: 0 0 20px 0;
+}
+
+.text-phone {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 23px;
+  color: #232323;
+  margin: 0 0 15px 0 ;
+}
+
+.phone-number {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 1.335px;
+  color: #232323;
+  margin: 0 0 20px 0;
+}
+
+.line-profile-f {
+  width: 100%;
+  height: 2px;
+  background: #F6F6F6;
+  margin: 0 0 25px 0;
+}
+
+.wrap-doc {
+  margin: 0 0 20px 0;
+  .tab-active-f {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    letter-spacing: -0.165px;
+    color: #FFFFFF;
+    padding: 0 25px;
+    width: fit-content;
+    height: 50px;
+    background: #7E98DF;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .tab-inactive-f {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    letter-spacing: -0.165px;
+    color: #232323;
+    cursor: pointer;
+  }
+}
+
+.tab-location-f {
+  background-color: #dadada
 }
 
 @media (min-width: 1367px) {

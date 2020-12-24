@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-flex justify-content-center align-items-center">
+  <div class="container-fluid d-flex justify-content-center">
     <main class=" box-auth d-flex flex-column align-items-center">
       <!-- Title Login -->
       <h1>Login</h1>
@@ -69,8 +69,9 @@ export default {
 <style lang="scss" scoped>
 
 .container-fluid {
-  padding: 150px 0;
+  padding: 100px 0;
   background: #F6F6F6;
+  // height: 100vh;
 }
 
 .space {
@@ -125,6 +126,7 @@ h4 {
 }
 
 h5 {
+  text-align: center;
   font-family: Rubik;
   font-style: normal;
   font-weight: normal;
@@ -203,6 +205,12 @@ button:hover {
   line-height: 19px;
   text-align: center;
   color: #7E98DF;
+}
+
+@media (min-height: 910px) {
+  .container-fluid {
+    height: 100vh;
+  }
 }
 
 </style>

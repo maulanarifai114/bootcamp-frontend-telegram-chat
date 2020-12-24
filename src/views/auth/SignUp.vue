@@ -74,7 +74,7 @@ export default {
 <style lang="scss" scoped>
 
 .container-fluid {
-  padding: 150px 0;
+  padding: 100px 0;
   background: #F6F6F6;
 }
 
@@ -86,6 +86,10 @@ export default {
 .img {
   left: 0;
   top: 0;
+}
+
+.img:hover {
+  opacity: .8;
 }
 
 img {
