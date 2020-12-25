@@ -4,7 +4,7 @@
     <section class="left-side d-flex flex-column position-relative">
       <!-- Menu After Click -->
       <div class="menu position-absolute flex-column justify-content-between" :class="activeMenu === 1 ? 'd-flex':'d-none'">
-        <div class="menu-select d-flex justify-content-between">
+        <div class="menu-select d-flex justify-content-between" @click="activateProfile">
           <h2 class=" align-self-center">Settings</h2>
           <img src="../../assets/settings.svg" alt="setting">
         </div>
@@ -31,14 +31,14 @@
       </div>
       <!-- Title -->
       <div class="wrap-title d-flex w-100 justify-content-between">
-        <h1 class="title">Telegram</h1>
+        <h1 class="title" @click="activateProfile">Telegram</h1>
         <!-- Menu -->
         <img src="../../assets/menu.svg" alt="menu" @click="activateMenu">
       </div>
       <!-- Search -->
       <div class="wrap-search d-flex justify-content-between">
-        <div class="search d-flex ">
-          <img src="../../assets/search.svg" alt="search">
+        <div class="search d-flex">
+          <img src="../../assets/search.svg" alt="search" @click="handleSearch">
           <input type="text" placeholder="Type your message..." v-model="search" @keypress.enter="handleSearch">
         </div>
         <img src="../../assets/plus.svg" alt="plus">
@@ -79,6 +79,7 @@
         <!-- End Per Person -->
       </div>
     </section>
+
     <!-- Right Side -->
     <section class="right-side flex-grow-1 position-relative">
       <!-- Unselected Chat -->
@@ -88,7 +89,7 @@
       <!-- Selected Chat -->
       <div class="room-chat h-100 d-flex flex-column">
         <!-- Header -->
-        <div class="header-chat d-flex" @click="activateProfile">
+        <div class="header-chat d-flex" @click="activateProfileFriend">
           <!-- Photo Profile -->
           <div class="wrap-img">
             <img src="../../assets/default.svg" alt="photo">
@@ -140,16 +141,74 @@
         </div>
       </div>
     </section>
+
+    <!-- My Profile -->
+    <section class=" position-absolute d-flex flex-column" :class="activeProfile === 1 ? 'profile-active':'profile-inactive'">
+      <!-- My Username and icon Back -->
+      <div class="wrap-username d-flex w-100 justify-content-center position-relative" @click="activateProfile">
+        <img src="../../assets/back.svg" alt="back" class=" position-absolute">
+        <div class="username">{{username}}</div>
+      </div>
+      <!-- My Photo Profile -->
+      <div class="container-photo d-flex justify-content-center">
+        <div class="wrap-profile">
+          <img :src="img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${img}`)" alt="photo">
+        </div>
+      </div>
+      <!-- My Name and Username -->
+      <div class="wrap-name align-self-center">
+        <input type="text" class="my-name-edit w-100" v-model="name" v-if="editName === 1" @keyup.enter="saveName">
+        <input type="text" class="my-name w-100" v-model="name" v-if="editName === 0" disabled>
+        <div class="edit-name" @click="activateName" v-if="editName === 0">Edit Name</div>
+        <div class="edit-name" @click="saveName" v-if="editName === 1">Save Name</div>
+        <div class="my-username">{{username}}</div>
+      </div>
+      <!-- My Phone Number -->
+      <div class="wrap-my-phone">
+        <div class="account">Account</div>
+        <input type="text" class="my-phone-edit w-100" v-model="phone" v-if="editPhone === 1" @keyup.enter="savePhone">
+        <input type="text" class="my-phone w-100" v-model="phone" v-if="editPhone === 0" disabled>
+        <div class="tap-to" @click="activatePhone" v-if="editPhone === 0">Tap to change phone number</div>
+        <div class="tap-to" @click="savePhone" v-if="editPhone === 1">Enter to save phone number</div>
+      </div>
+      <!-- My Username -->
+      <div class="wrap-my-username w-100">
+        <!-- <div class="input-my-username">@wdlam</div> -->
+        <input type="text" class="input-my-username w-100" v-model="username" v-if="editUsername === 1" @keyup.enter="saveUsername">
+        <input type="text" class="save-my-username w-100" v-model="username" v-if="editUsername === 0" disabled>
+        <div class="username">Username</div>
+        <div class="tap-to" @click="activateUsername" v-if="editUsername === 0">Tap to change username</div>
+        <div class="tap-to" @click="saveUsername" v-if="editUsername === 1">Enter to save username</div>
+      </div>
+      <!-- My Bio -->
+      <div class="wrap-bio">
+        <div class="container-bio">
+          <textarea class="activeBio" name="bio" id="bio" v-model="bio" v-if="editBio === 1"></textarea>
+          <textarea class="inactiveBio" name="bio" id="bio" v-model="bio" v-if="editBio === 0" disabled></textarea>
+        </div>
+        <div class="bio">Bio</div>
+        <div class="tap-to" @click="activateBio" v-if="editBio === 0">Tap to change bio</div>
+        <div class="tap-to" @click="saveBio" v-if="editBio === 1">Enter to save bio</div>
+      </div>
+      <!-- My Location -->
+      <div class="wrap-location">
+        <div class="title-location">Location</div>
+        <div class="location w-100"></div>
+      </div>
+    </section>
+
     <!-- Profile Friends -->
     <section class="position-absolute d-flex flex-column" :class="activeProfileFriend === 1 ? 'profile-f-active':'profile-f-inactive'">
       <!-- Username Friend -->
-      <div class="wrap-username d-flex w-100 justify-content-center align-items-center">
-        <img src="../../assets/back.svg" alt="back">
+      <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
+        <img src="../../assets/back.svg" alt="back" class=" position-absolute">
         <div class="username-f">@mmldolg</div>
       </div>
       <!-- Photo Profile Friend -->
-      <div class="wrap-profile-f align-self-center">
-        <img src="../../assets/default.svg" alt="profile">
+      <div class="container-profile-f d-flex justify-content-center">
+        <div class="wrap-profile-f align-self-center">
+          <img src="../../assets/default.svg" alt="profile">
+        </div>
       </div>
       <!-- Name Friend -->
       <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
@@ -157,15 +216,13 @@
           <div class="name-f">Mother</div>
           <div class="status-f">Online</div>
         </div>
-        <img src="../../assets/chat.svg" alt="chat">
+        <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
       </div>
       <!-- Phone Number -->
       <div class="wrap-phone-f">
         <div class="text-phone">Phone number</div>
         <div class="phone-number">+375(29)9239003</div>
       </div>
-      <!-- Line -->
-      <div class="line-profile-f"></div>
       <!-- Misc/Document Tab -->
       <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
         <div class="tab-active-f">Location</div>
@@ -173,7 +230,10 @@
         <div class="tab-inactive-f">Document</div>
       </div>
       <!-- Tab Location Friend-->
-      <div class="tab-location-f flex-grow-1"></div>
+      <!-- <div class="tab-location-f"></div> -->
+      <div class="wrap-location">
+        <div class="location w-100"></div>
+      </div>
     </section>
   </div>
 </template>
@@ -185,9 +245,21 @@ export default {
     return {
       search: '',
       tab: '',
-      array: [1, 2, 3, 4, 5, 6, 7, 8],
+      array: [1],
+      // My Profile
+      img: '',
+      phone: '+375(29)9638433',
+      name: 'Gloria Mckinney',
+      username: '@wdlam',
+      bio: 'I’m Senior Frontend Developer from Microsoft',
+      // Edit Mode
+      editName: 0,
+      editPhone: 0,
+      editUsername: 0,
+      editBio: 0,
       activeMenu: 0,
-      activeProfileFriend: 1
+      activeProfileFriend: 0,
+      activeProfile: 0
     }
   },
   methods: {
@@ -196,6 +268,50 @@ export default {
       console.log('handleSearch ' + search)
       this.search = ''
     },
+    activateName () {
+      if (this.editName === 0) {
+        this.editName++
+      }
+    },
+    saveName () {
+      if (this.editName > 0) {
+        this.editName--
+        console.log(this.name)
+      }
+    },
+    activatePhone () {
+      if (this.editPhone === 0) {
+        this.editPhone++
+      }
+    },
+    savePhone () {
+      if (this.editPhone > 0) {
+        this.editPhone--
+        console.log(this.phone)
+      }
+    },
+    activateUsername () {
+      if (this.editUsername === 0) {
+        this.editUsername++
+      }
+    },
+    saveUsername () {
+      if (this.editUsername > 0) {
+        this.editUsername--
+        console.log(this.username)
+      }
+    },
+    activateBio () {
+      if (this.editBio === 0) {
+        this.editBio++
+      }
+    },
+    saveBio () {
+      if (this.editBio > 0) {
+        this.editBio--
+        console.log(this.bio)
+      }
+    },
     activateMenu () {
       if (this.activeMenu === 0) {
         this.activeMenu++
@@ -203,11 +319,18 @@ export default {
         this.activeMenu--
       }
     },
-    activateProfile () {
+    activateProfileFriend () {
       if (this.activeProfileFriend === 0) {
         this.activeProfileFriend++
       } else if (this.activeProfileFriend > 0) {
         this.activeProfileFriend--
+      }
+    },
+    activateProfile () {
+      if (this.activeProfile === 0) {
+        this.activeProfile++
+      } else if (this.activeProfile > 0) {
+        this.activeProfile--
       }
     }
   }
@@ -620,6 +743,294 @@ export default {
   }
 }
 
+// My Profile
+.profile-active {
+  width: 350px;
+  background-color: white;
+  left: 0;
+  height: 100vh;
+  top: 0;
+  border-right: 1px solid #E5E5E5;
+  padding: 28px 28px 0 28px;
+  overflow: auto;
+}
+
+.profile-inactive {
+  width: 350px;
+  background-color: white;
+  left: -350px;
+  height: 100vh;
+  top: 0;
+  border-right: 1px solid #E5E5E5;
+  padding: 28px;
+  overflow: auto;
+}
+
+.wrap-username {
+  cursor: pointer;
+  margin: 0 0 50px 0;
+  img {
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+    margin: 0 25px 0 0;
+  }
+  .username {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #7E98DF;
+  }
+}
+
+.container-photo {
+  width: 100%;
+  height: 82px;
+  margin: 0 0 25px 0;
+  .wrap-profile {
+    width: 82px;
+    height: 82px;
+    border-radius: 30px;
+    background-color: #dadada;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.wrap-name {
+  margin: 0 0 35px 0;
+  width: 100%;
+  .my-name-edit {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: -0.165px;
+    color: #232323;
+    text-align: center;
+    margin: 0 0 7px 0;
+    border-bottom: 1px solid #dadada;
+  }
+  .my-name {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: -0.165px;
+    color: #232323;
+    text-align: center;
+    margin: 0 0 7px 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-bottom: 1px solid #dadada00;
+  }
+  .edit-name {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1em;
+    color:  #7E98DF;
+    text-align: center;
+    margin: 0 0 7px 0;
+    cursor: pointer;
+  }
+  .edit-name:hover{
+    opacity: .8;
+  }
+  .my-username {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 1.335px;
+    color: #848484;
+    text-align: center;
+  }
+}
+
+.wrap-my-phone {
+  margin: 0 0 25px 0;
+  padding: 0 0 25px 0;
+  border-bottom: 2px solid #F6F6F6;
+  .account {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 23px;
+    color: #232323;
+    margin: 0 0 15px 0;
+  }
+  .my-phone-edit {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 1.335px;
+    color: #232323;
+    margin: 0 0 8px 0;
+    background-color: rgba($color: #000000, $alpha: 0);
+  }
+  .my-phone {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 1.335px;
+    color: #848484;
+    margin: 0 0 8px 0;
+    background-color: rgba($color: #000000, $alpha: 0);
+  }
+  .tap-to {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.17px;
+    color: #7E98DF;
+    cursor: pointer;
+  }
+}
+
+.wrap-my-username {
+  margin: 0 0 25px 0;
+  border-bottom: 2px solid #F6F6F6;
+  .input-my-username {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #232323;
+    margin: 0 0 8px 0;
+    background-color: rgba($color: #000000, $alpha: 0);
+  }
+  .save-my-username {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #848484;
+    margin: 0 0 8px 0;
+    background-color: rgba($color: #000000, $alpha: 0);
+  }
+  .username {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.17px;
+    color: #848484;
+    margin: 0 0 8px 0;
+  }
+  .tap-to {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.17px;
+    color: #7E98DF;
+    cursor: pointer;
+    margin: 0 0 25px 0;
+  }
+}
+
+.wrap-bio {
+  margin: 0 0 25px 0;
+  border-bottom: 2px solid #F6F6F6;
+  .container-bio {
+    background-color: #ffffff;
+    min-height: 58px;
+    .activeBio {
+      background-color: #ffffff00;
+      padding: 0;
+      width: 100%;
+      min-height: 58px;
+      outline: 0;
+      border: 0;
+      resize: none;
+      font-family: Rubik;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 181%;
+      color: #232323;
+    }
+    .inactiveBio {
+      background-color: #ffffff00;
+      padding: 0;
+      width: 100%;
+      min-height: 58px;
+      outline: 0;
+      border: 0;
+      resize: none;
+      font-family: Rubik;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 181%;
+      color: #848484;
+    }
+    textarea:focus {
+      outline: 0;
+      border: 0;
+      padding: 0;
+      resize: none;
+    }
+  }
+  .bio {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.17px;
+    color: #848484;
+    margin: 0 0 8px 0;
+  }
+  .tap-to {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.17px;
+    color: #7E98DF;
+    cursor: pointer;
+    margin: 0 0 25px 0;
+  }
+}
+
+.wrap-location {
+  margin: 0 0 28px 0;
+  .title-location {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 23px;
+    color: #232323;
+    margin: 0 0 15px 0;
+  }
+  .location {
+    height: 300px;
+    background-color: #dadada;
+  }
+}
+
 // Friends Profile
 .profile-f-active {
   width: 350px;
@@ -628,7 +1039,7 @@ export default {
   height: 100vh;
   top: 0;
   border-left: 1px solid #E5E5E5;
-  padding: 45px 28px 0 28px;
+  padding: 28px 28px 0 28px;
   overflow: auto;
 }
 
@@ -639,14 +1050,17 @@ export default {
   height: 100vh;
   top: 0;
   border-left: 1px solid #E5E5E5;
-  padding: 45px 28px 0 28px;
+  padding: 28px 28px 0 28px;
   overflow: auto;
 }
 
-.wrap-username {
+.wrap-username-f {
   cursor: pointer;
   margin: 0 0 50px 0;
   img {
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
     margin: 0 25px 0 0;
   }
   .username-f {
@@ -659,76 +1073,76 @@ export default {
   }
 }
 
-.wrap-profile-f {
-  width: 82px;
+.container-profile-f {
+  width: 100%;
   height: 82px;
-  border-radius: 30px;
-  background-color: #dadada;
-  overflow: hidden;
   margin: 0 0 25px 0;
-  img {
-    width: 100%;
+  .wrap-profile-f {
+    width: 82px;
+    height: 82px;
+    border-radius: 30px;
+    background-color: #dadada;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
   }
 }
 
 .wrap-name-f {
+  margin: 0 0 35px 0;
+  .name-status-f {
+    .name-f {
+      font-family: Rubik;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 26px;
+      letter-spacing: -0.165px;
+      color: #232323;
+      margin: 0 0 7px 0;
+    }
+    .status-f {
+      font-family: Rubik;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 19px;
+      letter-spacing: 1.335px;
+      color: #232323;
+    }
+  }
   img {
     cursor: pointer;
   }
 }
 
-.name-f {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 26px;
-  letter-spacing: -0.165px;
-  color: #232323;
-  margin: 0 0 7px 0;
-}
-
-.status-f {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 19px;
-  letter-spacing: 1.335px;
-  color: #232323;
-  margin: 0 0 20px 0;
-}
-
-.text-phone {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 19px;
-  line-height: 23px;
-  color: #232323;
-  margin: 0 0 15px 0 ;
-}
-
-.phone-number {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 19px;
-  letter-spacing: 1.335px;
-  color: #232323;
-  margin: 0 0 20px 0;
-}
-
-.line-profile-f {
-  width: 100%;
-  height: 2px;
-  background: #F6F6F6;
-  margin: 0 0 25px 0;
+.wrap-phone-f {
+  border-bottom: 2px solid #F6F6F6;
+  margin: 0 0 35px 0;
+  .text-phone {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 23px;
+    color: #232323;
+    margin: 0 0 15px 0 ;
+  }
+  .phone-number {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 1.335px;
+    color: #232323;
+    margin: 0 0 20px 0;
+  }
 }
 
 .wrap-doc {
-  margin: 0 0 20px 0;
+  margin: 0 0 35px 0;
   .tab-active-f {
     font-family: Rubik;
     font-style: normal;
@@ -761,7 +1175,9 @@ export default {
 }
 
 .tab-location-f {
-  background-color: #dadada
+  background-color: #dadada;
+  width: 100%;
+  height: 300px;
 }
 
 @media (min-width: 1367px) {
