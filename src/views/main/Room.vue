@@ -45,31 +45,38 @@
       </div>
       <!-- All, Important, Unread -->
       <div class="wrap-tab d-flex justify-content-between align-items-center">
-        <div class="tab-inactive">All</div>
-        <div class="tab-active">Important</div>
-        <div class="tab-inactive">Unread</div>
+        <!-- All -->
+        <input @change="handleTab" v-model="tab" type="radio" id="all" name="tab" value="all">
+        <label :class="tab === 'all' ? 'tab-active': 'tab-inactive'" for="all">All</label><br>
+        <!-- Important -->
+        <input @change="handleTab" v-model="tab" type="radio" id="important" name="tab" value="important">
+        <label :class="tab === 'important' ? 'tab-active': 'tab-inactive'" for="important">Important</label><br>
+        <!-- Unread -->
+        <input @change="handleTab" v-model="tab" type="radio" id="unread" name="tab" value="unread">
+        <label :class="tab === 'unread' ? 'tab-active': 'tab-inactive'" for="unread">Unread</label>
       </div>
       <!-- Chat List (All Chat) -->
       <div class="wrap-chat w-100 d-flex flex-column ">
         <!-- Per Person -->
-        <div class="chat-person w-100 d-flex" v-for="(item, index) in array" :key="index">
+        <div class="chat-person w-100 d-flex" v-for="(item, index) in alluser" :key="index" @click="handleChat(item)">
           <!-- Image -->
           <div class="wrap-img">
-            <img src="../../assets/default.svg" alt="profile">
+            <!-- <img src="../../assets/default.svg" alt="profile"> -->
+            <img :src="item.img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${item.img}`)" alt="profile">
           </div>
           <!-- Name and Last Message -->
           <div class="wrap-name-message d-flex flex-column justify-content-between ">
-            <div class="name">Theresa Webb</div>
-            <div class="last-message">Why did you do that?</div>
+            <div class="name">{{item.name}}</div>
+            <div class="last-message">{{item.last}}</div>
           </div>
           <!-- Time and Count message -->
           <div class="wrap-time-count d-flex flex-column justify-content-between flex-grow-1 align-items-end">
             <!-- Time -->
-            <div class="time">15:20</div>
+            <div class="time">{{item.time}}</div>
             <!-- Count Message Unread -->
             <!-- <div class="count d-flex justify-content-center align-items-center">999+</div> -->
             <!-- Icon Send -->
-            <img src="../../assets/send.svg" alt="unread">
+            <!-- <img src="../../assets/send.svg" alt="unread"> -->
             <!-- Icon Unread -->
             <!-- <img src="../../assets/unread.svg" alt="unread"> -->
             <!-- Icon Read -->
@@ -92,11 +99,12 @@
         <div class="header-chat d-flex" @click="activateProfileFriend">
           <!-- Photo Profile -->
           <div class="wrap-img">
-            <img src="../../assets/default.svg" alt="photo">
+            <!-- <img src="../../assets/default.svg" alt="photo"> -->
+            <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="photo">
           </div>
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between ">
-            <div class="name">Mother</div>
+            <div class="name">{{nameF}}</div>
             <div class="status">Online</div>
           </div>
           <!-- Icon Menu -->
@@ -108,23 +116,29 @@
         <div class="body-chat ">
           <!-- Receiver -->
           <div class="receiver w-100 d-flex">
+            <!-- Image -->
             <div class="wrap-img-chat d-flex align-items-end">
               <div class="img-chat">
-                <img src="../../assets/default.svg" alt="">
+                <!-- <img src="../../assets/default.svg" alt=""> -->
+                <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="">
               </div>
             </div>
+            <!-- Receiver Message -->
             <div class="receiver-message">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente blanditiis rerum quaerat et natus, recusandae dolores ducimus tenetur possimus nihil perspiciatis dicta maxime veritatis nobis ullam, nostrum in fugit minima sequi error, reprehenderit porro dolor. Dolorem consequatur minus commodi rerum dolores rem voluptatum quia blanditiis? Doloremque odio, perspiciatis obcaecati vero vitae quae nemo natus repudiandae beatae repellendus sed quo neque laudantium, ex, impedit eos ad alias consequuntur maiores! Fugit quia deleniti doloribus temporibus necessitatibus quos. Pariatur necessitatibus, alias, ipsa vero quaerat laboriosam at quod praesentium magnam magni distinctio corporis! Unde consequatur accusamus rem blanditiis, a asperiores nesciunt repellendus neque hic.
             </div>
           </div>
           <!-- Sender -->
           <div class="sender w-100 d-flex justify-content-end">
+            <!-- Sender Message -->
             <div class="sender-message">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo ipsam expedita commodi quaerat vitae, tempora ut optio soluta error veritatis officiis dolorem dolore repellat sit distinctio. Consectetur mollitia exercitationem impedit reiciendis neque enim. Expedita nulla voluptate, optio amet itaque in impedit sed quisquam harum. Possimus obcaecati optio neque modi facere rerum error ab minima voluptatum ullam cum cumque in architecto, quod tenetur eum eligendi quo aliquam. Deleniti odio quasi amet optio quos ratione repudiandae corporis cum ad exercitationem, dolore voluptates asperiores voluptas, nam inventore aliquam non. Temporibus in ipsam eveniet tenetur, numquam sapiente quam esse. Laboriosam quo quam nostrum officia.
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo ipsam expedita commodi quaerat vitae, tempora ut optio soluta error veritatis officiis dolorem dolore repellat sit distinctio. Consectetur mollitia exercitationem impedit reiciendis neque enim. Expedita ''a voluptate, optio amet itaque in impedit sed quisquam harum. Possimus obcaecati optio neque modi facere rerum error ab minima voluptatum ullam cum cumque in architecto, quod tenetur eum eligendi quo aliquam. Deleniti odio quasi amet optio quos ratione repudiandae corporis cum ad exercitationem, dolore voluptates asperiores voluptas, nam inventore aliquam non. Temporibus in ipsam eveniet tenetur, numquam sapiente quam esse. Laboriosam quo quam nostrum officia.
             </div>
+            <!-- Image -->
             <div class="wrap-img-chat">
               <div class="img-chat">
-                <img src="../../assets/default.svg" alt="">
+                <!-- <img src="../../assets/default.svg" alt=""> -->
+                <img :src="this.img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.img}`)" alt="">
               </div>
             </div>
           </div>
@@ -133,7 +147,7 @@
         <div class="wrap-send-chat">
           <!-- Input Messages -->
           <div class="wrap-input w-100 h-100 d-flex align-items-center">
-            <input type="text" placeholder="Type your message...">
+            <input type="text" placeholder="Type your message..." v-model="chat">
             <img src="../../assets/plus.svg" alt="plus">
             <img src="../../assets/emoji.svg" alt="emoji">
             <img src="../../assets/image.svg" alt="image">
@@ -202,18 +216,19 @@
       <!-- Username Friend -->
       <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
         <img src="../../assets/back.svg" alt="back" class=" position-absolute">
-        <div class="username-f">@mmldolg</div>
+        <div class="username-f">{{usernameF}}</div>
       </div>
       <!-- Photo Profile Friend -->
       <div class="container-profile-f d-flex justify-content-center">
         <div class="wrap-profile-f align-self-center">
-          <img src="../../assets/default.svg" alt="profile">
+          <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
+          <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="profile">
         </div>
       </div>
       <!-- Name Friend -->
       <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
         <div class="name-status-f">
-          <div class="name-f">Mother</div>
+          <div class="name-f">{{nameF}}</div>
           <div class="status-f">Online</div>
         </div>
         <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
@@ -221,7 +236,7 @@
       <!-- Phone Number -->
       <div class="wrap-phone-f">
         <div class="text-phone">Phone number</div>
-        <div class="phone-number">+375(29)9239003</div>
+        <div class="phone-number">{{phoneF}}</div>
       </div>
       <!-- Misc/Document Tab -->
       <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
@@ -243,31 +258,89 @@ export default {
   name: 'Room',
   data () {
     return {
+      // Left Side
       search: '',
-      tab: '',
-      array: [1],
+      tab: 'important',
+      // Chat List
+      alluser: [
+        {
+          id: 1,
+          username: '@twebb',
+          img: 'theresa-webb.png',
+          name: 'Theressa',
+          last: 'How are you going?',
+          time: '15:33',
+          phone: '081234567891'
+        },
+        {
+          id: 2,
+          username: '@calvin',
+          img: 'calvin-flores.png',
+          name: 'Calvin Flores',
+          last: 'Whats Your Name?',
+          time: '23:12',
+          phone: '086912035554'
+        },
+        {
+          id: 3,
+          username: '@radenmra',
+          img: '',
+          name: 'Raden Maulana',
+          last: 'Hi, I\'m raden',
+          time: '13:00',
+          phone: '085771926851'
+        }
+      ],
       // My Profile
-      img: '',
+      img: 'mother.png',
       phone: '+375(29)9638433',
       name: 'Gloria Mckinney',
       username: '@wdlam',
       bio: 'I’m Senior Frontend Developer from Microsoft',
+      // Profile Friends
+      usernameF: '',
+      phoneF: '',
+      nameF: '',
+      imgF: '',
+      // Send Chat
+      chat: '',
       // Edit Mode
       editName: 0,
       editPhone: 0,
       editUsername: 0,
       editBio: 0,
+      // Show and Hide
       activeMenu: 0,
       activeProfileFriend: 0,
       activeProfile: 0
     }
   },
   methods: {
+    // Handle Search (Left Side)
     handleSearch () {
       const search = this.search
       console.log('handleSearch ' + search)
       this.search = ''
     },
+    // Handle Tab (ALl, Important, Unread)
+    handleTab () {
+      if (this.tab === 'all') {
+        console.log(this.tab)
+      } else if (this.tab === 'important') {
+        console.log(this.tab)
+      } else if (this.tab === 'unread') {
+        console.log(this.tab)
+      }
+    },
+    // Handle Chat
+    handleChat (item) {
+      this.imgF = item.img
+      this.usernameF = item.username
+      this.nameF = item.name
+      this.phoneF = item.phone
+      // console.log(this.alluser)
+    },
+    // Activate Edit Mode and Save Name Profile (Left Side)
     activateName () {
       if (this.editName === 0) {
         this.editName++
@@ -279,6 +352,7 @@ export default {
         console.log(this.name)
       }
     },
+    // Activate Edit Mode and Save Name Profile (Left Side)
     activatePhone () {
       if (this.editPhone === 0) {
         this.editPhone++
@@ -290,6 +364,7 @@ export default {
         console.log(this.phone)
       }
     },
+    // Activate Edit Mode and Save Name Profile (Left Side)
     activateUsername () {
       if (this.editUsername === 0) {
         this.editUsername++
@@ -301,6 +376,7 @@ export default {
         console.log(this.username)
       }
     },
+    // Activate Edit Mode and Save Name Profile (Left Side)
     activateBio () {
       if (this.editBio === 0) {
         this.editBio++
@@ -312,6 +388,7 @@ export default {
         console.log(this.bio)
       }
     },
+    // Show and Hide Menu (Beside Title Telegram)
     activateMenu () {
       if (this.activeMenu === 0) {
         this.activeMenu++
@@ -319,6 +396,7 @@ export default {
         this.activeMenu--
       }
     },
+    // Show and Hide Friends Profile
     activateProfileFriend () {
       if (this.activeProfileFriend === 0) {
         this.activeProfileFriend++
@@ -326,6 +404,7 @@ export default {
         this.activeProfileFriend--
       }
     },
+    // Show and Hide My Profile
     activateProfile () {
       if (this.activeProfile === 0) {
         this.activeProfile++
@@ -338,6 +417,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+input[type=radio] {
+  display: none;
+}
 
 .container-fluid {
   height: 100vh;
@@ -526,6 +609,10 @@ export default {
   padding: 0 18px;
 }
 
+.tab-active:hover, .tab-inactive:hover {
+  opacity: .8;
+}
+
 // Chat List
 .wrap-chat {
   overflow: auto;
@@ -567,7 +654,7 @@ export default {
   color: #232323;
 }
 
-.last-message, .status {
+.status {
   font-family: Rubik;
   font-style: normal;
   font-weight: normal;
@@ -575,6 +662,16 @@ export default {
   line-height: 17px;
   letter-spacing: -0.165px;
   color: #7E98DF;
+}
+
+.last-message {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.165px;
+  color: #848484;
 }
 
 .time {
