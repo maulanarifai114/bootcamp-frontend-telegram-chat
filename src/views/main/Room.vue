@@ -29,13 +29,13 @@
           <img src="../../assets/faq.svg" alt="setting">
         </div>
       </div>
-      <!-- Title -->
+      <!-- Title Telegram -->
       <div class="wrap-title d-flex w-100 justify-content-between">
         <h1 class="title" @click="activateProfile">Telegram</h1>
         <!-- Menu -->
         <img src="../../assets/menu.svg" alt="menu" @click="activateMenu">
       </div>
-      <!-- Search -->
+      <!-- Search User -->
       <div class="wrap-search d-flex justify-content-between">
         <div class="search d-flex">
           <img src="../../assets/search.svg" alt="search" @click="handleSearch">
@@ -291,6 +291,44 @@ export default {
           phone: '085771926851'
         }
       ],
+      allmessages: [
+        {
+          id: 1,
+          msg: 'Halo 1',
+          senderId: 1,
+          receiverId: 2
+        },
+        {
+          id: 2,
+          msg: 'Halo 2',
+          senderId: 2,
+          receiverId: 1
+        },
+        {
+          id: 3,
+          msg: 'Halo 3',
+          senderId: 1,
+          receiverId: 3
+        },
+        {
+          id: 4,
+          msg: 'Halo 4',
+          senderId: 3,
+          receiverId: 1
+        },
+        {
+          id: 5,
+          msg: 'Halo 5',
+          senderId: 2,
+          receiverId: 3
+        },
+        {
+          id: 6,
+          msg: 'Halo 6',
+          senderId: 3,
+          receiverId: 2
+        }
+      ],
       // My Profile
       img: 'mother.png',
       phone: '+375(29)9638433',
@@ -332,13 +370,16 @@ export default {
         console.log(this.tab)
       }
     },
-    // Handle Chat
-    handleChat (item) {
+    // Handle Chat List
+    handleChatList (item) {
       this.imgF = item.img
       this.usernameF = item.username
       this.nameF = item.name
       this.phoneF = item.phone
-      // console.log(this.alluser)
+    },
+    // Handle Chat
+    handleChat () {
+
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
     activateName () {
