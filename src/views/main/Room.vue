@@ -115,6 +115,7 @@
         <div class="body-chat ">
           <!-- All Messages -->
           <div v-for="msg in allmessages" :key="msg.id">
+
             <!-- If Receiver -->
             <div v-if="msg.senderId === msg.isReceiver && msg.receiverId === msg.isSender ">
               <!-- Receiver -->
@@ -449,8 +450,14 @@ export default {
         imgReceiver: this.$store.state.imgF,
         imgSender: this.$store.state.img
       }
+      // const saved = {
+      //   msg: e.target.value,
+      //   senderId: this.$store.state.senderId,
+      //   receiverId: this.$store.state.receiverId
+      // }
       console.log(chatting)
       this.allmessages.push(chatting)
+      // socket.emit('save', saved)
       this.chat = ''
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
