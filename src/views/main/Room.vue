@@ -58,10 +58,9 @@
       <!-- Chat List (All Chat) -->
       <div class="wrap-chat w-100 d-flex flex-column ">
         <!-- Per Person -->
-        <div class="chat-person w-100 d-flex" v-for="(item, index) in alluser" :key="index" @click="handleChat(item)">
+        <div class="chat-person w-100 d-flex" v-for="(item, index) in alluser" :key="index" @click="handleChatList(item)">
           <!-- Image -->
           <div class="wrap-img">
-            <!-- <img src="../../assets/default.svg" alt="profile"> -->
             <img :src="item.img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${item.img}`)" alt="profile">
           </div>
           <!-- Name and Last Message -->
@@ -114,34 +113,46 @@
         </div>
         <!-- Body -->
         <div class="body-chat ">
-          <!-- Receiver -->
-          <div class="receiver w-100 d-flex">
-            <!-- Image -->
-            <div class="wrap-img-chat d-flex align-items-end">
-              <div class="img-chat">
-                <!-- <img src="../../assets/default.svg" alt=""> -->
-                <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="">
+          <!-- All Messages -->
+          <div v-for="msg in allmessages" :key="msg.id">
+            <!-- If Receiver -->
+            <div v-if="msg.senderId === msg.isReceiver">
+              <!-- Receiver -->
+              <div class="receiver w-100 d-flex">
+                <!-- Image -->
+                <div class="wrap-img-chat d-flex align-items-end">
+                  <div class="img-chat">
+                    <img src="../../assets/default.svg" alt="" v-if="msg.imgReceiver === ''">
+                    <img :src="msg.imgReceiver" alt="">
+                  </div>
+                </div>
+                <!-- Receiver Message -->
+                <div class="receiver-message" >
+                  {{msg.msg}}
+                </div>
               </div>
             </div>
-            <!-- Receiver Message -->
-            <div class="receiver-message">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente blanditiis rerum quaerat et natus, recusandae dolores ducimus tenetur possimus nihil perspiciatis dicta maxime veritatis nobis ullam, nostrum in fugit minima sequi error, reprehenderit porro dolor. Dolorem consequatur minus commodi rerum dolores rem voluptatum quia blanditiis? Doloremque odio, perspiciatis obcaecati vero vitae quae nemo natus repudiandae beatae repellendus sed quo neque laudantium, ex, impedit eos ad alias consequuntur maiores! Fugit quia deleniti doloribus temporibus necessitatibus quos. Pariatur necessitatibus, alias, ipsa vero quaerat laboriosam at quod praesentium magnam magni distinctio corporis! Unde consequatur accusamus rem blanditiis, a asperiores nesciunt repellendus neque hic.
-            </div>
-          </div>
-          <!-- Sender -->
-          <div class="sender w-100 d-flex justify-content-end">
-            <!-- Sender Message -->
-            <div class="sender-message">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo ipsam expedita commodi quaerat vitae, tempora ut optio soluta error veritatis officiis dolorem dolore repellat sit distinctio. Consectetur mollitia exercitationem impedit reiciendis neque enim. Expedita ''a voluptate, optio amet itaque in impedit sed quisquam harum. Possimus obcaecati optio neque modi facere rerum error ab minima voluptatum ullam cum cumque in architecto, quod tenetur eum eligendi quo aliquam. Deleniti odio quasi amet optio quos ratione repudiandae corporis cum ad exercitationem, dolore voluptates asperiores voluptas, nam inventore aliquam non. Temporibus in ipsam eveniet tenetur, numquam sapiente quam esse. Laboriosam quo quam nostrum officia.
-            </div>
-            <!-- Image -->
-            <div class="wrap-img-chat">
-              <div class="img-chat">
-                <!-- <img src="../../assets/default.svg" alt=""> -->
-                <img :src="this.img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.img}`)" alt="">
+
+            <!-- Else Sender -->
+            <div v-else-if="msg.senderId === msg.isSender && msg.receiverId === msg.isReceiver">
+              <!-- Sender -->
+              <div class="sender w-100 d-flex justify-content-end">
+                <!-- Sender Message -->
+                <div class="sender-message" >
+                  {{msg.msg}}
+                </div>
+                <!-- Image -->
+                <div class="wrap-img-chat">
+                  <div class="img-chat">
+                    <img src="../../assets/default.svg" alt="" v-if="msg.imgSender === ''">
+                    <img :src="msg.imgSender" alt="">
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
+
         </div>
         <!-- Box Send Chat -->
         <div class="wrap-send-chat">
@@ -294,42 +305,57 @@ export default {
       allmessages: [
         {
           id: 1,
-          msg: 'Halo 1',
+          msg: 'dari Theresa untuk Mother',
           senderId: 1,
-          receiverId: 2
+          receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
         },
         {
           id: 2,
-          msg: 'Halo 2',
-          senderId: 2,
-          receiverId: 1
+          msg: 'dari Mother untuk Theresa',
+          senderId: 4,
+          receiverId: 1,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
         },
         {
           id: 3,
-          msg: 'Halo 3',
-          senderId: 1,
-          receiverId: 3
+          msg: 'dari Calvin untuk Mother',
+          senderId: 2,
+          receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
         },
         {
           id: 4,
-          msg: 'Halo 4',
-          senderId: 3,
-          receiverId: 1
+          msg: 'dari Mother untuk Calvin',
+          senderId: 4,
+          receiverId: 2,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
         },
         {
           id: 5,
-          msg: 'Halo 5',
-          senderId: 2,
-          receiverId: 3
-        },
-        {
-          id: 6,
-          msg: 'Halo 6',
-          senderId: 3,
-          receiverId: 2
+          msg: 'dari Theresa lagi untuk Mother',
+          senderId: 1,
+          receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
         }
       ],
       // My Profile
+      id: 4,
       img: 'mother.png',
       phone: '+375(29)9638433',
       name: 'Gloria Mckinney',
@@ -340,6 +366,7 @@ export default {
       phoneF: '',
       nameF: '',
       imgF: '',
+      idF: 0,
       // Send Chat
       chat: '',
       // Edit Mode
@@ -376,6 +403,15 @@ export default {
       this.usernameF = item.username
       this.nameF = item.name
       this.phoneF = item.phone
+      this.idF = item.id
+      this.$store.commit('SET_RECEIVER', item.id)
+      let chat
+      for (chat of this.allmessages) {
+        chat.isReceiver = this.$store.state.receiverId
+        chat.isSender = this.$store.state.senderId
+        console.log(chat.isReceiver)
+        console.log(chat.isSender)
+      }
     },
     // Handle Chat
     handleChat () {
