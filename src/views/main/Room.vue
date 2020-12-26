@@ -89,11 +89,11 @@
     <!-- Right Side -->
     <section class="right-side flex-grow-1 position-relative">
       <!-- Unselected Chat -->
-      <!-- <div class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div> -->
+      <div v-if="this.selected === 0" class="not-select d-flex justify-content-center align-items-center h-100">Please select a chat to start messaging</div>
       <!-- Menu Chat -->
       <!-- <div class="menu-profile position-absolute"></div> -->
       <!-- Selected Chat -->
-      <div class="room-chat h-100 d-flex flex-column">
+      <div v-if="this.selected === 1" class="room-chat h-100 d-flex flex-column">
         <!-- Header -->
         <div class="header-chat d-flex" @click="activateProfileFriend">
           <!-- Photo Profile -->
@@ -116,7 +116,7 @@
           <!-- All Messages -->
           <div v-for="msg in allmessages" :key="msg.id">
             <!-- If Receiver -->
-            <div v-if="msg.senderId === msg.isReceiver">
+            <div v-if="msg.senderId === msg.isReceiver && msg.receiverId === msg.isSender ">
               <!-- Receiver -->
               <div class="receiver w-100 d-flex">
                 <!-- Image -->
@@ -278,7 +278,7 @@ export default {
           id: 1,
           username: '@twebb',
           img: 'theresa-webb.png',
-          name: 'Theressa',
+          name: 'Theresa',
           last: 'How are you going?',
           time: '15:33',
           phone: '081234567891'
@@ -325,17 +325,7 @@ export default {
         },
         {
           id: 3,
-          msg: 'dari Calvin untuk Mother',
-          senderId: 2,
-          receiverId: 4,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 4,
-          msg: 'dari Mother untuk Calvin',
+          msg: 'Good morning Calvin, from Mother',
           senderId: 4,
           receiverId: 2,
           imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
@@ -344,10 +334,40 @@ export default {
           isSender: this.$store.state.senderId
         },
         {
+          id: 4,
+          msg: 'Good morning mom, from Calvin',
+          senderId: 2,
+          receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
+        },
+        {
           id: 5,
-          msg: 'dari Theresa lagi untuk Mother',
+          msg: 'Good morning mom, from Theresa',
           senderId: 1,
           receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
+        },
+        {
+          id: 6,
+          msg: 'Good morning mom, from Raden',
+          senderId: 3,
+          receiverId: 4,
+          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
+          imgSender: '',
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId
+        },
+        {
+          id: 6,
+          msg: 'Hi Theresa, ini Calvin',
+          senderId: 2,
+          receiverId: 1,
           imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
           imgSender: '',
           isReceiver: this.$store.state.receiverId,
@@ -367,6 +387,8 @@ export default {
       nameF: '',
       imgF: '',
       idF: 0,
+      // Right Side
+      selected: 0,
       // Send Chat
       chat: '',
       // Edit Mode
@@ -399,6 +421,7 @@ export default {
     },
     // Handle Chat List
     handleChatList (item) {
+      this.selected = 1
       this.imgF = item.img
       this.usernameF = item.username
       this.nameF = item.name
@@ -409,8 +432,6 @@ export default {
       for (chat of this.allmessages) {
         chat.isReceiver = this.$store.state.receiverId
         chat.isSender = this.$store.state.senderId
-        console.log(chat.isReceiver)
-        console.log(chat.isSender)
       }
     },
     // Handle Chat
