@@ -61,7 +61,7 @@
         <div class="chat-person w-100 d-flex" v-for="(item, index) in alluser" :key="index" @click="handleChatList(item)">
           <!-- Image -->
           <div class="wrap-img">
-            <img :src="item.img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${item.img}`)" alt="profile">
+            <img :src="item.img === '' ? require(`../../assets/default.svg`) : item.img" alt="profile">
           </div>
           <!-- Name and Last Message -->
           <div class="wrap-name-message d-flex flex-column justify-content-between ">
@@ -99,7 +99,7 @@
           <!-- Photo Profile -->
           <div class="wrap-img">
             <!-- <img src="../../assets/default.svg" alt="photo"> -->
-            <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="photo">
+            <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : this.imgF" alt="photo">
           </div>
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between ">
@@ -158,7 +158,7 @@
         <div class="wrap-send-chat">
           <!-- Input Messages -->
           <div class="wrap-input w-100 h-100 d-flex align-items-center">
-            <input type="text" placeholder="Type your message..." v-model="chat">
+            <input type="text" placeholder="Type your message..." v-model="chat" @keyup.enter="handleChat">
             <img src="../../assets/plus.svg" alt="plus">
             <img src="../../assets/emoji.svg" alt="emoji">
             <img src="../../assets/image.svg" alt="image">
@@ -177,7 +177,7 @@
       <!-- My Photo Profile -->
       <div class="container-photo d-flex justify-content-center">
         <div class="wrap-profile">
-          <img :src="img === '' ? require(`../../assets/default.svg`) : require(`../../assets/${img}`)" alt="photo">
+          <img :src="img === '' ? require(`../../assets/default.svg`) : this.$store.state.img" alt="photo">
         </div>
       </div>
       <!-- My Name and Username -->
@@ -233,7 +233,7 @@
       <div class="container-profile-f d-flex justify-content-center">
         <div class="wrap-profile-f align-self-center">
           <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
-          <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : require(`../../assets/${this.imgF}`)" alt="profile">
+          <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : this.imgF" alt="profile">
         </div>
       </div>
       <!-- Name Friend -->
@@ -277,19 +277,19 @@ export default {
         {
           id: 1,
           username: '@twebb',
-          img: 'theresa-webb.png',
+          img: 'https://www.seekpng.com/png/full/74-744270_ready-to-press-transfer-baby-elephant-mandala-svg.png',
           name: 'Theresa',
-          last: 'How are you going?',
-          time: '15:33',
+          last: '',
+          time: '',
           phone: '081234567891'
         },
         {
           id: 2,
           username: '@calvin',
-          img: 'calvin-flores.png',
+          img: 'https://www.seekpng.com/png/full/21-218274_grenade-granada-pubg-game-jogo-pubg-grenade-png.png',
           name: 'Calvin Flores',
-          last: 'Whats Your Name?',
-          time: '23:12',
+          last: '',
+          time: '',
           phone: '086912035554'
         },
         {
@@ -297,8 +297,8 @@ export default {
           username: '@radenmra',
           img: '',
           name: 'Raden Maulana',
-          last: 'Hi, I\'m raden',
-          time: '13:00',
+          last: '',
+          time: '',
           phone: '085771926851'
         }
       ],
@@ -364,7 +364,7 @@ export default {
           isSender: this.$store.state.senderId
         },
         {
-          id: 6,
+          id: 7,
           msg: 'Hi Theresa, ini Calvin',
           senderId: 2,
           receiverId: 1,
@@ -428,15 +428,30 @@ export default {
       this.phoneF = item.phone
       this.idF = item.id
       this.$store.commit('SET_RECEIVER', item.id)
+      this.$store.commit('SET_IMG_FRIEND', item.img)
       let chat
       for (chat of this.allmessages) {
         chat.isReceiver = this.$store.state.receiverId
         chat.isSender = this.$store.state.senderId
+        chat.imgReceiver = this.$store.state.imgF
+        chat.imgSender = this.$store.state.img
       }
     },
     // Handle Chat
-    handleChat () {
-
+    handleChat (e) {
+      const chatting = {
+        // id: 8,
+        msg: e.target.value,
+        senderId: this.$store.state.senderId,
+        receiverId: this.$store.state.receiverId,
+        isReceiver: this.$store.state.receiverId,
+        isSender: this.$store.state.senderId,
+        imgReceiver: this.$store.state.imgF,
+        imgSender: this.$store.state.img
+      }
+      console.log(chatting)
+      this.allmessages.push(chatting)
+      this.chat = ''
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
     activateName () {
