@@ -317,12 +317,12 @@ export default {
       axios.get(`${process.env.VUE_APP_BASE_URL}user`)
         .then((res) => {
           const allusers = res.data.result
-          console.log(allusers)
+          // console.log(allusers)
           let user
           for (user of allusers) {
             user.isSender = this.$store.state.senderId
             this.alluser.push(user)
-            console.log(user)
+            // console.log(user)
           }
         })
         .catch((err) => {
@@ -334,7 +334,7 @@ export default {
       axios.get(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`)
         .then((res) => {
           const user = res.data.result[0]
-          console.log(user)
+          // console.log(user)
           this.$store.commit('SET_SENDER', user)
           this.id = user.id
           this.img = user.img
@@ -342,16 +342,6 @@ export default {
           this.fullName = user.fullName
           this.username = user.username
           this.bio = user.bio
-        })
-        .catch((err) => {
-          console.log(err.response.data.err)
-        })
-    },
-    // Get All Messages
-    gettAllMsg () {
-      axios.get(`${process.env.VUE_APP_BASE_URL}user/msg`)
-        .then((res) => {
-          console.log(res.data.result)
         })
         .catch((err) => {
           console.log(err.response.data.err)
@@ -377,13 +367,23 @@ export default {
     handleChatList (item) {
       this.selected = 1
       this.$store.commit('SET_RECEIVER', item)
-      // let chat
-      // for (chat of this.allmessages) {
-      //   chat.isReceiver = this.$store.state.receiverId
-      //   chat.isSender = this.$store.state.senderId
-      //   chat.imgReceiver = this.$store.state.imgF
-      //   chat.imgSender = this.$store.state.img
-      // }
+      this.allmessages = []
+      axios.get(`${process.env.VUE_APP_BASE_URL}user/msg`)
+        .then((res) => {
+          const allmsg = res.data.result
+          let msg
+          for (msg of allmsg) {
+            msg.isReceiver = this.$store.state.receiverId
+            msg.isSender = this.$store.state.senderId
+            msg.imgReceiver = this.$store.state.imgF
+            msg.imgSender = this.$store.state.img
+            this.allmessages.push(msg)
+            console.log(msg)
+          }
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+        })
     },
     // Handle Chat
     handleChat (e) {
@@ -532,7 +532,6 @@ export default {
   mounted () {
     this.getAllUser()
     this.getUserById()
-    this.gettAllMsg()
   }
 }
 </script>
