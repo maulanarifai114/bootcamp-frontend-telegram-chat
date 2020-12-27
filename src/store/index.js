@@ -18,15 +18,19 @@ export default new Vuex.Store({
     lng: 0,
     // Friend Profile (Receiver)
     receiverId: 0,
-    imgF: ''
+    imgF: '',
+    usernameF: '',
+    nameF: '',
+    phoneF: ''
   },
   mutations: {
     // Receiver
     SET_RECEIVER (state, data) {
-      state.receiverId = data
-    },
-    SET_IMG_FRIEND (state, data) {
-      state.imgF = data
+      state.receiverId = data.id
+      state.imgF = data.img
+      state.usernameF = data.username
+      state.nameF = data.fullName
+      state.phoneF = data.phone
     },
     // Sender
     SET_SENDER (state, data) {
@@ -37,6 +41,9 @@ export default new Vuex.Store({
       state.img = data.img
       state.lat = data.lat
       state.lng = data.lng
+    },
+    SET_IMAGE (state, data) {
+      state.img = data
     },
     SET_FULLNAME (state, data) {
       state.fullName = data

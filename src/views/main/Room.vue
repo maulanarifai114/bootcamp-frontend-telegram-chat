@@ -56,33 +56,35 @@
         <label :class="tab === 'unread' ? 'tab-active': 'tab-inactive'" for="unread">Unread</label>
       </div>
       <!-- Chat List (All Chat) -->
-      <div class="wrap-chat w-100 d-flex flex-column ">
-        <!-- Per Person -->
-        <div class="chat-person w-100 d-flex" v-for="(item, index) in alluser" :key="index" @click="handleChatList(item)">
-          <!-- Image -->
-          <div class="wrap-img">
-            <img :src="item.img === '' ? require(`../../assets/default.svg`) : item.img" alt="profile">
+      <div class="wrap-chat w-100 d-flex flex-column">
+        <div v-for="(item, index) in alluser" :key="index">
+          <!-- Per Person -->
+          <div class="chat-person w-100 d-flex" @click="handleChatList(item)" v-if="item.id !== item.isSender">
+            <!-- Image -->
+            <div class="wrap-img">
+              <img :src="item.img === '' ? require(`../../assets/default.svg`) : item.img" alt="profile">
+            </div>
+            <!-- Name and Last Message -->
+            <div class="wrap-name-message d-flex flex-column justify-content-between ">
+              <div class="name">{{item.fullName}}</div>
+              <div class="last-message">{{item.last}}</div>
+            </div>
+            <!-- Time and Count message -->
+            <div class="wrap-time-count d-flex flex-column justify-content-between flex-grow-1 align-items-end">
+              <!-- Time -->
+              <div class="time">{{item.time}}</div>
+              <!-- Count Message Unread -->
+              <!-- <div class="count d-flex justify-content-center align-items-center">999+</div> -->
+              <!-- Icon Send -->
+              <!-- <img src="../../assets/send.svg" alt="unread"> -->
+              <!-- Icon Unread -->
+              <!-- <img src="../../assets/unread.svg" alt="unread"> -->
+              <!-- Icon Read -->
+              <!-- <img src="../../assets/read.svg" alt="read"> -->
+            </div>
           </div>
-          <!-- Name and Last Message -->
-          <div class="wrap-name-message d-flex flex-column justify-content-between ">
-            <div class="name">{{item.name}}</div>
-            <div class="last-message">{{item.last}}</div>
-          </div>
-          <!-- Time and Count message -->
-          <div class="wrap-time-count d-flex flex-column justify-content-between flex-grow-1 align-items-end">
-            <!-- Time -->
-            <div class="time">{{item.time}}</div>
-            <!-- Count Message Unread -->
-            <!-- <div class="count d-flex justify-content-center align-items-center">999+</div> -->
-            <!-- Icon Send -->
-            <!-- <img src="../../assets/send.svg" alt="unread"> -->
-            <!-- Icon Unread -->
-            <!-- <img src="../../assets/unread.svg" alt="unread"> -->
-            <!-- Icon Read -->
-            <!-- <img src="../../assets/read.svg" alt="read"> -->
-          </div>
+          <!-- End Per Person -->
         </div>
-        <!-- End Per Person -->
       </div>
     </section>
 
@@ -99,11 +101,11 @@
           <!-- Photo Profile -->
           <div class="wrap-img">
             <!-- <img src="../../assets/default.svg" alt="photo"> -->
-            <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : this.imgF" alt="photo">
+            <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="photo">
           </div>
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between ">
-            <div class="name">{{nameF}}</div>
+            <div class="name">{{this.$store.state.nameF}}</div>
             <div class="status">Online</div>
           </div>
           <!-- Icon Menu -->
@@ -177,9 +179,12 @@
       </div>
       <!-- My Photo Profile -->
       <div class="container-photo d-flex justify-content-center">
-        <div class="wrap-profile">
-          <img :src="img === '' ? require(`../../assets/default.svg`) : img" alt="photo">
-        </div>
+        <label for="image">
+          <div class="wrap-profile d-flex justify-content-center align-items-center">
+            <img :src="img === '' ? require(`../../assets/default.svg`) : img" alt="photo">
+          </div>
+        </label>
+        <input type="file" @change="handleChangeImage" class="d-none" id="image" multiple>
       </div>
       <!-- My Name and Username -->
       <div class="wrap-name align-self-center">
@@ -227,19 +232,19 @@
       <!-- Username Friend -->
       <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
         <img src="../../assets/back.svg" alt="back" class=" position-absolute">
-        <div class="username-f">{{usernameF}}</div>
+        <div class="username-f">{{this.$store.state.usernameF}}</div>
       </div>
       <!-- Photo Profile Friend -->
       <div class="container-profile-f d-flex justify-content-center">
         <div class="wrap-profile-f align-self-center">
           <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
-          <img :src="this.imgF === '' ? require(`../../assets/default.svg`) : this.imgF" alt="profile">
+          <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="profile">
         </div>
       </div>
       <!-- Name Friend -->
       <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
         <div class="name-status-f">
-          <div class="name-f">{{nameF}}</div>
+          <div class="name-f">{{this.$store.state.nameF}}</div>
           <div class="status-f">Online</div>
         </div>
         <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
@@ -247,7 +252,7 @@
       <!-- Phone Number -->
       <div class="wrap-phone-f">
         <div class="text-phone">Phone number</div>
-        <div class="phone-number">{{phoneF}}</div>
+        <div class="phone-number">{{this.$store.state.phoneF}}</div>
       </div>
       <!-- Misc/Document Tab -->
       <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
@@ -266,6 +271,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Room',
@@ -310,7 +316,14 @@ export default {
     getAllUser () {
       axios.get(`${process.env.VUE_APP_BASE_URL}user`)
         .then((res) => {
-          console.log(res.data.result)
+          const allusers = res.data.result
+          console.log(allusers)
+          let user
+          for (user of allusers) {
+            user.isSender = this.$store.state.senderId
+            this.alluser.push(user)
+            console.log(user)
+          }
         })
         .catch((err) => {
           console.log(err.response.data.err)
@@ -363,20 +376,14 @@ export default {
     // Handle Chat List
     handleChatList (item) {
       this.selected = 1
-      this.imgF = item.img
-      this.usernameF = item.username
-      this.nameF = item.name
-      this.phoneF = item.phone
-      this.receiverId = item.id
-      this.$store.commit('SET_RECEIVER', item.id)
-      this.$store.commit('SET_IMG_FRIEND', item.img)
-      let chat
-      for (chat of this.allmessages) {
-        chat.isReceiver = this.$store.state.receiverId
-        chat.isSender = this.$store.state.senderId
-        chat.imgReceiver = this.$store.state.imgF
-        chat.imgSender = this.$store.state.img
-      }
+      this.$store.commit('SET_RECEIVER', item)
+      // let chat
+      // for (chat of this.allmessages) {
+      //   chat.isReceiver = this.$store.state.receiverId
+      //   chat.isSender = this.$store.state.senderId
+      //   chat.imgReceiver = this.$store.state.imgF
+      //   chat.imgSender = this.$store.state.img
+      // }
     },
     // Handle Chat
     handleChat (e) {
@@ -392,6 +399,30 @@ export default {
       console.log(chatting)
       this.allmessages.push(chatting)
       this.chat = ''
+    },
+    handleChangeImage (e) {
+      console.log(e.target.files[0])
+      const data = new FormData()
+      data.append('img', e.target.files[0])
+      console.log(data)
+      axios.put(`${process.env.VUE_APP_BASE_URL}user/img/${localStorage.getItem('id')}`, data)
+        .then((res) => {
+          axios.get(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`)
+            .then((res) => {
+              const user = res.data.result[0]
+              console.log(user)
+              this.img = user.img
+              this.$store.commit('SET_IMAGE', user.img)
+            })
+            .catch((err) => {
+              console.log(err.response.data.err)
+            })
+          console.log(res.data.result)
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+          Swal.fire('Oops..', err.response.data.err, 'error')
+        })
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
     activateName () {
@@ -727,6 +758,8 @@ input[type=radio] {
   margin: 0 15px 0 0;
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -742,6 +775,10 @@ input[type=radio] {
   line-height: 21px;
   letter-spacing: -0.165px;
   color: #232323;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status {
@@ -853,6 +890,8 @@ input[type=radio] {
     overflow: hidden;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -982,8 +1021,11 @@ input[type=radio] {
     border-radius: 30px;
     background-color: #dadada;
     overflow: hidden;
+    cursor: pointer;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -1272,6 +1314,8 @@ input[type=radio] {
     overflow: hidden;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -1288,6 +1332,10 @@ input[type=radio] {
       letter-spacing: -0.165px;
       color: #232323;
       margin: 0 0 7px 0;
+      width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .status-f {
       font-family: Rubik;
