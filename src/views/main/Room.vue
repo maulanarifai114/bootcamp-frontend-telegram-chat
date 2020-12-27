@@ -272,11 +272,13 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import io from 'socket.io-client'
 
 export default {
   name: 'Room',
   data () {
     return {
+      socket: io('http://localhost:4000'),
       // Left Side
       search: '',
       tab: 'important',
@@ -387,18 +389,26 @@ export default {
     },
     // Handle Chat
     handleChat (e) {
-      const chatting = {
-        msg: e.target.value,
-        senderId: this.$store.state.senderId,
-        receiverId: this.$store.state.receiverId,
-        isReceiver: this.$store.state.receiverId,
-        isSender: this.$store.state.senderId,
-        imgReceiver: this.$store.state.imgF,
-        imgSender: this.$store.state.img
+      if (e.target.value !== '') {
+        const chatting = {
+          msg: e.target.value,
+          senderId: this.$store.state.senderId,
+          receiverId: this.$store.state.receiverId,
+          isReceiver: this.$store.state.receiverId,
+          isSender: this.$store.state.senderId,
+          imgReceiver: this.$store.state.imgF,
+          imgSender: this.$store.state.img
+        }
+        const message = {
+          msg: e.target.value,
+          senderId: this.$store.state.senderId,
+          receiverId: this.$store.state.receiverId
+        }
+        console.log(chatting)
+        this.allmessages.push(chatting)
+        this.socket.emit('sendMsg', message)
+        this.chat = ''
       }
-      console.log(chatting)
-      this.allmessages.push(chatting)
-      this.chat = ''
     },
     handleChangeImage (e) {
       console.log(e.target.files[0])
@@ -532,6 +542,15 @@ export default {
   mounted () {
     this.getAllUser()
     this.getUserById()
+    this.socket.on('sendBack', (data) => {
+      console.log('ini sendback')
+      data.isReceiver = this.$store.state.receiverId
+      data.isSender = this.$store.state.senderId
+      data.imgReceiver = this.$store.state.imgF
+      data.imgSender = this.$store.state.img
+      console.log(data)
+      this.allmessages.push(data)
+    })
   }
 }
 </script>
