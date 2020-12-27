@@ -15,7 +15,7 @@
       <form @submit.prevent="signup">
         <!-- Full Name -->
         <label for="name" class=" align-self-start">Name</label>
-        <input type="text" id="name" v-model="name" maxlength="64" required>
+        <input type="text" id="name" v-model="fullName" maxlength="64" required>
         <div class="space"></div>
         <!-- Email -->
         <label for="email" class=" align-self-start">Email</label>
@@ -43,26 +43,35 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Swal from 'sweetalert2'
+
 export default {
   name: 'Login',
   data () {
     return {
       email: '',
       password: '',
-      name: ''
+      fullName: ''
     }
   },
   methods: {
     signup () {
       const email = this.email
       const password = this.password
-      const name = this.name
-      console.log(email)
-      console.log(password)
-      console.log(name)
-      this.email = ''
-      this.password = ''
-      this.name = ''
+      const fullName = this.fullName
+      const data = { email, password, fullName }
+      console.log(data)
+      axios.post(`${process.env.VUE_APP_BASE_URL}auth/signup`, data)
+        .then((res) => {
+          console.log(res.data)
+          Swal.fire('Success Register', 'Let\'s Go Login', 'success')
+          this.$router.push('/login')
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+          Swal.fire('Failed Register', err.response.data.err, 'error')
+        })
     },
     goLogin () {
       this.$router.push('/login')

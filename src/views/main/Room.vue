@@ -173,21 +173,21 @@
       <!-- My Username and icon Back -->
       <div class="wrap-username d-flex w-100 justify-content-center position-relative" @click="activateProfile">
         <img src="../../assets/back.svg" alt="back" class=" position-absolute">
-        <div class="username">{{username}}</div>
+        <div class="username">{{this.$store.state.username}}</div>
       </div>
       <!-- My Photo Profile -->
       <div class="container-photo d-flex justify-content-center">
         <div class="wrap-profile">
-          <img :src="img === '' ? require(`../../assets/default.svg`) : this.$store.state.img" alt="photo">
+          <img :src="img === '' ? require(`../../assets/default.svg`) : img" alt="photo">
         </div>
       </div>
       <!-- My Name and Username -->
       <div class="wrap-name align-self-center">
-        <input type="text" class="my-name-edit w-100" v-model="name" v-if="editName === 1" @keyup.enter="saveName">
-        <input type="text" class="my-name w-100" v-model="name" v-if="editName === 0" disabled>
+        <input type="text" class="my-name-edit w-100" v-model="fullName" v-if="editName === 1" @keyup.enter="saveName">
+        <input type="text" class="my-name w-100" v-model="fullName" v-if="editName === 0" disabled>
         <div class="edit-name" @click="activateName" v-if="editName === 0">Edit Name</div>
         <div class="edit-name" @click="saveName" v-if="editName === 1">Save Name</div>
-        <div class="my-username">{{username}}</div>
+        <div class="my-username">{{this.$store.state.username}}</div>
       </div>
       <!-- My Phone Number -->
       <div class="wrap-my-phone">
@@ -199,7 +199,6 @@
       </div>
       <!-- My Username -->
       <div class="wrap-my-username w-100">
-        <!-- <div class="input-my-username">@wdlam</div> -->
         <input type="text" class="input-my-username w-100" v-model="username" v-if="editUsername === 1" @keyup.enter="saveUsername">
         <input type="text" class="save-my-username w-100" v-model="username" v-if="editUsername === 0" disabled>
         <div class="username">Username</div>
@@ -209,8 +208,8 @@
       <!-- My Bio -->
       <div class="wrap-bio">
         <div class="container-bio">
-          <textarea class="activeBio" name="bio" id="bio" v-model="bio" v-if="editBio === 1"></textarea>
-          <textarea class="inactiveBio" name="bio" id="bio" v-model="bio" v-if="editBio === 0" disabled></textarea>
+          <textarea type="text" name="bio" id="bio" class="activeBio" v-model="bio" v-if="editBio === 1"></textarea>
+          <textarea type="text" name="bio" id="bio" class="inactiveBio" v-model="bio" v-if="editBio === 0" disabled></textarea>
         </div>
         <div class="bio">Bio</div>
         <div class="tap-to" @click="activateBio" v-if="editBio === 0">Tap to change bio</div>
@@ -266,6 +265,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Room',
   data () {
@@ -274,120 +275,21 @@ export default {
       search: '',
       tab: 'important',
       // Chat List
-      alluser: [
-        {
-          id: 1,
-          username: '@twebb',
-          img: 'https://www.seekpng.com/png/full/74-744270_ready-to-press-transfer-baby-elephant-mandala-svg.png',
-          name: 'Theresa',
-          last: '',
-          time: '',
-          phone: '081234567891'
-        },
-        {
-          id: 2,
-          username: '@calvin',
-          img: 'https://www.seekpng.com/png/full/21-218274_grenade-granada-pubg-game-jogo-pubg-grenade-png.png',
-          name: 'Calvin Flores',
-          last: '',
-          time: '',
-          phone: '086912035554'
-        },
-        {
-          id: 3,
-          username: '@radenmra',
-          img: '',
-          name: 'Raden Maulana',
-          last: '',
-          time: '',
-          phone: '085771926851'
-        }
-      ],
-      allmessages: [
-        {
-          id: 1,
-          msg: 'dari Theresa untuk Mother',
-          senderId: 1,
-          receiverId: 4,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 2,
-          msg: 'dari Mother untuk Theresa',
-          senderId: 4,
-          receiverId: 1,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 3,
-          msg: 'Good morning Calvin, from Mother',
-          senderId: 4,
-          receiverId: 2,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 4,
-          msg: 'Good morning mom, from Calvin',
-          senderId: 2,
-          receiverId: 4,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 5,
-          msg: 'Good morning mom, from Theresa',
-          senderId: 1,
-          receiverId: 4,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 6,
-          msg: 'Good morning mom, from Raden',
-          senderId: 3,
-          receiverId: 4,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        },
-        {
-          id: 7,
-          msg: 'Hi Theresa, ini Calvin',
-          senderId: 2,
-          receiverId: 1,
-          imgReceiver: 'https://www.svgrepo.com/show/230856/profile-user.svg',
-          imgSender: '',
-          isReceiver: this.$store.state.receiverId,
-          isSender: this.$store.state.senderId
-        }
-      ],
+      alluser: [],
+      allmessages: [],
       // My Profile
-      id: 4,
-      img: 'mother.png',
-      phone: '+375(29)9638433',
-      name: 'Gloria Mckinney',
-      username: '@wdlam',
-      bio: 'I’m Senior Frontend Developer from Microsoft',
+      senderId: '',
+      img: '',
+      phone: '',
+      fullName: '',
+      username: '',
+      bio: '',
       // Profile Friends
       usernameF: '',
       phoneF: '',
       nameF: '',
       imgF: '',
-      idF: 0,
+      receiverId: '',
       // Right Side
       selected: 0,
       // Send Chat
@@ -404,6 +306,44 @@ export default {
     }
   },
   methods: {
+    // Get All User
+    getAllUser () {
+      axios.get(`${process.env.VUE_APP_BASE_URL}user`)
+        .then((res) => {
+          console.log(res.data.result)
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+        })
+    },
+    // Get User Login
+    getUserById () {
+      axios.get(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`)
+        .then((res) => {
+          const user = res.data.result[0]
+          console.log(user)
+          this.$store.commit('SET_SENDER', user)
+          this.id = user.id
+          this.img = user.img
+          this.phone = user.phone
+          this.fullName = user.fullName
+          this.username = user.username
+          this.bio = user.bio
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+        })
+    },
+    // Get All Messages
+    gettAllMsg () {
+      axios.get(`${process.env.VUE_APP_BASE_URL}user/msg`)
+        .then((res) => {
+          console.log(res.data.result)
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+        })
+    },
     // Handle Search (Left Side)
     handleSearch () {
       const search = this.search
@@ -427,7 +367,7 @@ export default {
       this.usernameF = item.username
       this.nameF = item.name
       this.phoneF = item.phone
-      this.idF = item.id
+      this.receiverId = item.id
       this.$store.commit('SET_RECEIVER', item.id)
       this.$store.commit('SET_IMG_FRIEND', item.img)
       let chat
@@ -441,7 +381,6 @@ export default {
     // Handle Chat
     handleChat (e) {
       const chatting = {
-        // id: 8,
         msg: e.target.value,
         senderId: this.$store.state.senderId,
         receiverId: this.$store.state.receiverId,
@@ -450,14 +389,8 @@ export default {
         imgReceiver: this.$store.state.imgF,
         imgSender: this.$store.state.img
       }
-      // const saved = {
-      //   msg: e.target.value,
-      //   senderId: this.$store.state.senderId,
-      //   receiverId: this.$store.state.receiverId
-      // }
       console.log(chatting)
       this.allmessages.push(chatting)
-      // socket.emit('save', saved)
       this.chat = ''
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
@@ -469,7 +402,15 @@ export default {
     saveName () {
       if (this.editName > 0) {
         this.editName--
-        console.log(this.name)
+        console.log(this.fullName)
+        axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { fullName: this.fullName })
+          .then((res) => {
+            this.$store.commit('SET_FULLNAME', this.fullName)
+            console.log(res.data.result)
+          })
+          .catch((err) => {
+            console.log(err.response.data.err)
+          })
       }
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
@@ -482,6 +423,14 @@ export default {
       if (this.editPhone > 0) {
         this.editPhone--
         console.log(this.phone)
+        axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { phone: this.phone })
+          .then((res) => {
+            this.$store.commit('SET_PHONE', this.phone)
+            console.log(res.data.result)
+          })
+          .catch((err) => {
+            console.log(err.response.data.err)
+          })
       }
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
@@ -494,6 +443,14 @@ export default {
       if (this.editUsername > 0) {
         this.editUsername--
         console.log(this.username)
+        axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { username: this.username })
+          .then((res) => {
+            this.$store.commit('SET_USERNAME', this.username)
+            console.log(res.data.result)
+          })
+          .catch((err) => {
+            console.log(err.response.data.err)
+          })
       }
     },
     // Activate Edit Mode and Save Name Profile (Left Side)
@@ -506,6 +463,14 @@ export default {
       if (this.editBio > 0) {
         this.editBio--
         console.log(this.bio)
+        axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { bio: this.bio })
+          .then((res) => {
+            this.$store.commit('SET_BIO', this.bio)
+            console.log(res.data.result)
+          })
+          .catch((err) => {
+            console.log(err.response.data.err)
+          })
       }
     },
     // Show and Hide Menu (Beside Title Telegram)
@@ -532,6 +497,11 @@ export default {
         this.activeProfile--
       }
     }
+  },
+  mounted () {
+    this.getAllUser()
+    this.getUserById()
+    this.gettAllMsg()
   }
 }
 </script>

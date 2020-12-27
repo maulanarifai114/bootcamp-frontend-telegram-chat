@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Swal from 'sweetalert2'
+
 export default {
   name: 'Login',
   data () {
@@ -53,11 +56,20 @@ export default {
     login () {
       const email = this.email
       const password = this.password
-      console.log(email)
-      console.log(password)
-      this.email = ''
-      this.password = ''
-      this.$router.push('/room')
+      const data = { email, password }
+      axios.post(`${process.env.VUE_APP_BASE_URL}auth/login`, data)
+        .then((res) => {
+          console.log(res.data.result)
+          localStorage.setItem('id', res.data.result.id)
+          localStorage.setItem('token', res.data.result.token)
+          this.$store.commit('SET_SENDER', res.data.result)
+          Swal.fire('Success Login', 'Let\'s chat your friends', 'success')
+          this.$router.push('/room')
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+          Swal.fire('Failed Login', err.response.data.err, 'error')
+        })
     },
     goSignup () {
       this.$router.push('/signup')
