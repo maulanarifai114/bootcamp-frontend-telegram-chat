@@ -1,8 +1,11 @@
 <template>
-<l-map style="height: 350px" :zoom="zoom" :center="center">
-<l-tile-layer :url="url"></l-tile-layer>
-<l-marker :lat-lng="markerLatLng" ></l-marker>
-</l-map>
+  <div>
+    <l-map style="height: 350px" :zoom="zoom" :center="center">
+      <l-tile-layer :url="url"></l-tile-layer>
+      <l-marker :lat-lng="markerLatLng" ></l-marker>
+    </l-map>
+    <button @click="getLokasi">Click Location</button>
+  </div>
 </template>
 
 <script>
@@ -17,10 +20,31 @@ export default {
   data () {
     return {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      zoom: 3,
-      center: [47.313220, -1.319482],
-      markerLatLng: [47.313220, -1.319482]
+      zoom: 16,
+      center: [0, 0],
+      markerLatLng: [0, 0]
     }
+  },
+  methods: {
+    getLokasi () {
+      this.$getLocation({ enableHighAccuracy: true })
+        .then(coordinates => {
+          this.center = []
+          this.markerLatLng = []
+          this.center.push(coordinates.lat)
+          this.center.push(coordinates.lng)
+          this.markerLatLng.push(coordinates.lat)
+          this.markerLatLng.push(coordinates.lng)
+          console.log('center', this.center)
+          console.log('marker', this.markerLatLng)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
+  mounted () {
+    this.getLokasi()
   }
 }
 </script>

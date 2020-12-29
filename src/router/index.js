@@ -9,7 +9,7 @@ import SignUp from '../views/auth/SignUp.vue'
 import Room from '../views/main/Room.vue'
 
 // Geolocation
-import Geo from '../views/geolocation/Geo.vue'
+// import Geo from '../views/geolocation/Geo.vue'
 
 Vue.use(VueRouter)
 
@@ -43,14 +43,11 @@ const routes = [
       requiresAuth: true
     }
   },
-  {
-    path: '/geo',
-    name: 'Geo',
-    component: Geo,
-    meta: {
-      requiresAuth: true
-    }
-  },
+  // {
+  //   path: '/geo',
+  //   name: 'Geo',
+  //   component: Geo
+  // },
   {
     path: '*',
     name: 'All',
