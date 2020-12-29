@@ -8,6 +8,9 @@ import SignUp from '../views/auth/SignUp.vue'
 // Room Chat
 import Room from '../views/main/Room.vue'
 
+// Geolocation
+import Geo from '../views/geolocation/Geo.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -36,6 +39,14 @@ const routes = [
     path: '/room',
     name: 'Room',
     component: Room,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/geo',
+    name: 'Geo',
+    component: Geo,
     meta: {
       requiresAuth: true
     }

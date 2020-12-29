@@ -4,6 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
+// Vue Browser
+import VueGeolocation from 'vue-browser-geolocation'
+Vue.use(VueGeolocation)
+
 Vue.config.productionTip = false
 
 new Vue({
