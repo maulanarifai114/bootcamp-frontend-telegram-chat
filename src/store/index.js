@@ -60,6 +60,15 @@ export default new Vuex.Store({
       state.centerF.push(data.lat)
       state.centerF.push(data.lng)
     },
+    REMOVE_RECEIVER (state) {
+      state.statusF = ''
+      state.receiverId = 0
+      state.imgF = ''
+      state.usernameF = ''
+      state.nameF = ''
+      state.phoneF = ''
+      state.centerF = [0, 0]
+    },
     // Sender
     SET_SENDER (state, data) {
       state.status = 'Online'

@@ -29,12 +29,14 @@
           <img src="../../assets/faq.svg" alt="setting">
         </div>
       </div>
+
       <!-- Title Telegram -->
       <div class="wrap-title d-flex w-100 justify-content-between">
         <h1 class="title" @click="activateProfile">Telegram</h1>
         <!-- Menu -->
         <img src="../../assets/menu.svg" alt="menu" @click="activateMenu">
       </div>
+
       <!-- Search User -->
       <div class="wrap-search d-flex justify-content-between">
         <div class="search d-flex">
@@ -43,6 +45,7 @@
         </div>
         <img src="../../assets/plus.svg" alt="plus">
       </div>
+
       <!-- All, Important, Unread -->
       <div class="wrap-tab d-flex justify-content-between align-items-center">
         <!-- All -->
@@ -55,6 +58,7 @@
         <input @change="handleTab" v-model="tab" type="radio" id="unread" name="tab" value="unread">
         <label :class="tab === 'unread' ? 'tab-active': 'tab-inactive'" for="unread">Unread</label>
       </div>
+
       <!-- Chat List (All Chat) -->
       <div class="wrap-chat w-100 d-flex flex-column">
         <div v-for="(item, index) in alluser" :key="index">
@@ -86,6 +90,73 @@
           <!-- End Per Person -->
         </div>
       </div>
+
+      <!-- My Profile -->
+      <section class=" position-absolute d-flex flex-column" :class="activeProfile === 1 ? 'profile-active':'profile-inactive'">
+        <!-- My Username and icon Back -->
+        <div class="wrap-username d-flex w-100 justify-content-center position-relative" @click="activateProfile">
+          <img src="../../assets/back.svg" alt="back" class=" position-absolute">
+          <div class="username">{{this.$store.state.username}}</div>
+        </div>
+        <!-- My Photo Profile -->
+        <div class="container-photo d-flex justify-content-center">
+          <label for="image">
+            <div class="wrap-profile d-flex justify-content-center align-items-center">
+              <img :src="img === '' ? require(`../../assets/default.svg`) : img" alt="photo">
+            </div>
+          </label>
+          <input type="file" @change="handleChangeImage" class="d-none" id="image" multiple>
+        </div>
+        <!-- My Name and Username -->
+        <div class="wrap-name align-self-center">
+          <input type="text" class="my-name-edit w-100" v-model="fullName" v-if="editName === 1" @keyup.enter="saveName">
+          <input type="text" class="my-name w-100" v-model="fullName" v-if="editName === 0" disabled>
+          <div class="edit-name" @click="activateName" v-if="editName === 0">Edit Name</div>
+          <div class="edit-name" @click="saveName" v-if="editName === 1">Save Name</div>
+          <div class="my-username">{{this.$store.state.username}}</div>
+        </div>
+        <!-- My Phone Number -->
+        <div class="wrap-my-phone">
+          <div class="account">Account</div>
+          <input type="text" class="my-phone-edit w-100" v-model="phone" v-if="editPhone === 1" @keyup.enter="savePhone">
+          <input type="text" class="my-phone w-100" v-model="phone" v-if="editPhone === 0" disabled>
+          <div class="tap-to" @click="activatePhone" v-if="editPhone === 0">Tap to change phone number</div>
+          <div class="tap-to" @click="savePhone" v-if="editPhone === 1">Enter to save phone number</div>
+        </div>
+        <!-- My Username -->
+        <div class="wrap-my-username w-100">
+          <input type="text" class="input-my-username w-100" v-model="username" v-if="editUsername === 1" @keyup.enter="saveUsername">
+          <input type="text" class="save-my-username w-100" v-model="username" v-if="editUsername === 0" disabled>
+          <div class="username">Username</div>
+          <div class="tap-to" @click="activateUsername" v-if="editUsername === 0">Tap to change username</div>
+          <div class="tap-to" @click="saveUsername" v-if="editUsername === 1">Enter to save username</div>
+        </div>
+        <!-- My Bio -->
+        <div class="wrap-bio">
+          <div class="container-bio">
+            <textarea type="text" name="bio" id="bio" class="activeBio" v-model="bio" v-if="editBio === 1"></textarea>
+            <textarea type="text" name="bio" id="bio" class="inactiveBio" v-model="bio" v-if="editBio === 0" disabled></textarea>
+          </div>
+          <div class="bio">Bio</div>
+          <div class="tap-to" @click="activateBio" v-if="editBio === 0">Tap to change bio</div>
+          <div class="tap-to" @click="saveBio" v-if="editBio === 1">Enter to save bio</div>
+        </div>
+        <!-- My Location -->
+        <div class="wrap-location">
+          <div class="title-location">Location</div>
+          <div class="location w-100">
+            <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.center">
+              <l-tile-layer :url="url"></l-tile-layer>
+              <l-marker :lat-lng="this.$store.state.center" ></l-marker>
+            </l-map>
+          </div>
+        </div>
+        <!-- Log Out -->
+        <div class="wrap-logout">
+          <div class="logout" @click="logout">Log Out</div>
+        </div>
+      </section>
+
     </section>
 
     <!-- Right Side -->
@@ -168,118 +239,185 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- My Profile -->
-    <section class=" position-absolute d-flex flex-column" :class="activeProfile === 1 ? 'profile-active':'profile-inactive'">
-      <!-- My Username and icon Back -->
-      <div class="wrap-username d-flex w-100 justify-content-center position-relative" @click="activateProfile">
-        <img src="../../assets/back.svg" alt="back" class=" position-absolute">
-        <div class="username">{{this.$store.state.username}}</div>
-      </div>
-      <!-- My Photo Profile -->
-      <div class="container-photo d-flex justify-content-center">
-        <label for="image">
-          <div class="wrap-profile d-flex justify-content-center align-items-center">
-            <img :src="img === '' ? require(`../../assets/default.svg`) : img" alt="photo">
+      <!-- Profile Friends -->
+      <section class="position-absolute d-flex flex-column" :class="activeProfileFriend === 1 ? 'profile-f-active':'profile-f-inactive'">
+        <!-- Username Friend -->
+        <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
+          <img src="../../assets/back.svg" alt="back" class=" position-absolute">
+          <div class="username-f">{{this.$store.state.usernameF}}</div>
+        </div>
+        <!-- Photo Profile Friend -->
+        <div class="container-profile-f d-flex justify-content-center">
+          <div class="wrap-profile-f align-self-center">
+            <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
+            <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="profile">
           </div>
-        </label>
-        <input type="file" @change="handleChangeImage" class="d-none" id="image" multiple>
-      </div>
-      <!-- My Name and Username -->
-      <div class="wrap-name align-self-center">
-        <input type="text" class="my-name-edit w-100" v-model="fullName" v-if="editName === 1" @keyup.enter="saveName">
-        <input type="text" class="my-name w-100" v-model="fullName" v-if="editName === 0" disabled>
-        <div class="edit-name" @click="activateName" v-if="editName === 0">Edit Name</div>
-        <div class="edit-name" @click="saveName" v-if="editName === 1">Save Name</div>
-        <div class="my-username">{{this.$store.state.username}}</div>
-      </div>
-      <!-- My Phone Number -->
-      <div class="wrap-my-phone">
-        <div class="account">Account</div>
-        <input type="text" class="my-phone-edit w-100" v-model="phone" v-if="editPhone === 1" @keyup.enter="savePhone">
-        <input type="text" class="my-phone w-100" v-model="phone" v-if="editPhone === 0" disabled>
-        <div class="tap-to" @click="activatePhone" v-if="editPhone === 0">Tap to change phone number</div>
-        <div class="tap-to" @click="savePhone" v-if="editPhone === 1">Enter to save phone number</div>
-      </div>
-      <!-- My Username -->
-      <div class="wrap-my-username w-100">
-        <input type="text" class="input-my-username w-100" v-model="username" v-if="editUsername === 1" @keyup.enter="saveUsername">
-        <input type="text" class="save-my-username w-100" v-model="username" v-if="editUsername === 0" disabled>
-        <div class="username">Username</div>
-        <div class="tap-to" @click="activateUsername" v-if="editUsername === 0">Tap to change username</div>
-        <div class="tap-to" @click="saveUsername" v-if="editUsername === 1">Enter to save username</div>
-      </div>
-      <!-- My Bio -->
-      <div class="wrap-bio">
-        <div class="container-bio">
-          <textarea type="text" name="bio" id="bio" class="activeBio" v-model="bio" v-if="editBio === 1"></textarea>
-          <textarea type="text" name="bio" id="bio" class="inactiveBio" v-model="bio" v-if="editBio === 0" disabled></textarea>
         </div>
-        <div class="bio">Bio</div>
-        <div class="tap-to" @click="activateBio" v-if="editBio === 0">Tap to change bio</div>
-        <div class="tap-to" @click="saveBio" v-if="editBio === 1">Enter to save bio</div>
-      </div>
-      <!-- My Location -->
-      <div class="wrap-location">
-        <div class="title-location">Location</div>
-        <div class="location w-100">
-          <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.center">
-            <l-tile-layer :url="url"></l-tile-layer>
-            <l-marker :lat-lng="this.$store.state.center" ></l-marker>
-          </l-map>
+        <!-- Name Friend -->
+        <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
+          <div class="name-status-f">
+            <div class="name-f">{{this.$store.state.nameF}}</div>
+            <div class="status-f">Online</div>
+          </div>
+          <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
         </div>
-      </div>
-      <!-- Log Out -->
-      <div class="wrap-logout">
-        <div class="logout" @click="logout">Log Out</div>
-      </div>
+        <!-- Phone Number -->
+        <div class="wrap-phone-f">
+          <div class="text-phone">Phone number</div>
+          <div class="phone-number">{{this.$store.state.phoneF}}</div>
+        </div>
+        <!-- Misc/Document Tab -->
+        <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
+          <div class="tab-active-f">Location</div>
+          <div class="tab-inactive-f">Images</div>
+          <div class="tab-inactive-f">Document</div>
+        </div>
+        <!-- Tab Location Friend-->
+        <!-- <div class="tab-location-f"></div> -->
+        <div class="wrap-location">
+          <div class="location w-100">
+            <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.centerF">
+              <l-tile-layer :url="url"></l-tile-layer>
+              <l-marker :lat-lng="this.$store.state.centerF" ></l-marker>
+            </l-map>
+          </div>
+        </div>
+      </section>
+
     </section>
 
-    <!-- Profile Friends -->
-    <section class="position-absolute d-flex flex-column" :class="activeProfileFriend === 1 ? 'profile-f-active':'profile-f-inactive'">
-      <!-- Username Friend -->
-      <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
-        <img src="../../assets/back.svg" alt="back" class=" position-absolute">
-        <div class="username-f">{{this.$store.state.usernameF}}</div>
-      </div>
-      <!-- Photo Profile Friend -->
-      <div class="container-profile-f d-flex justify-content-center">
-        <div class="wrap-profile-f align-self-center">
-          <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
-          <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="profile">
+    <!-- Right Side 2-->
+    <section v-if="this.selected === 1" class="position-absolute d-none" :class="this.selected === 1 ? 'right-side-2-active':'right-side-2-inactive'">
+      <!-- Selected Chat -->
+      <div class="room-chat h-100 d-flex flex-column">
+        <!-- Header -->
+        <div class="header-chat d-flex">
+          <!-- Icon Back -->
+          <img src="../../assets/back.svg" alt="back" class="icon-2-back" @click="closeChat">
+          <!-- Photo Profile -->
+          <div class="wrap-img" @click="activateProfileFriend">
+            <!-- <img src="../../assets/default.svg" alt="photo"> -->
+            <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="photo">
+          </div>
+          <!-- Name and status -->
+          <div class="wrap-name-status d-flex flex-column justify-content-between " @click="activateProfileFriend">
+            <div class="name">{{this.$store.state.nameF}}</div>
+            <div class="status">Online</div>
+          </div>
+          <!-- Icon Menu -->
+          <!-- <div class="wrap-menu d-flex flex-grow-1 justify-content-end align-items-center">
+            <img src="../../assets/profile-menu.svg" alt="menu">
+          </div> -->
         </div>
-      </div>
-      <!-- Name Friend -->
-      <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
-        <div class="name-status-f">
-          <div class="name-f">{{this.$store.state.nameF}}</div>
-          <div class="status-f">Online</div>
+
+        <!-- Body -->
+        <div class="body-chat ">
+          <!-- All Messages -->
+          <div v-for="msg in allmessages" :key="msg.id">
+
+            <!-- If Receiver -->
+            <div v-if="msg.senderId === msg.isReceiver && msg.receiverId === msg.isSender ">
+              <!-- Receiver -->
+              <div class="receiver w-100 d-flex">
+                <!-- Image -->
+                <div class="wrap-img-chat d-flex align-items-end">
+                  <div class="img-chat">
+                    <img src="../../assets/default.svg" alt="" v-if="msg.imgReceiver === ''">
+                    <img :src="msg.imgReceiver" alt="">
+                  </div>
+                </div>
+                <!-- Receiver Message -->
+                <div class="receiver-message" >
+                  {{msg.msg}}
+                </div>
+              </div>
+            </div>
+
+            <!-- Else Sender -->
+            <div v-else-if="msg.senderId === msg.isSender && msg.receiverId === msg.isReceiver">
+              <!-- Sender -->
+              <div class="sender w-100 d-flex justify-content-end">
+                <!-- Sender Message -->
+                <div class="sender-message" >
+                  {{msg.msg}}
+                </div>
+                <!-- Image -->
+                <div class="wrap-img-chat">
+                  <div class="img-chat">
+                    <img src="../../assets/default.svg" alt="" v-if="msg.imgSender === ''">
+                    <img :src="msg.imgSender" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-        <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
-      </div>
-      <!-- Phone Number -->
-      <div class="wrap-phone-f">
-        <div class="text-phone">Phone number</div>
-        <div class="phone-number">{{this.$store.state.phoneF}}</div>
-      </div>
-      <!-- Misc/Document Tab -->
-      <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
-        <div class="tab-active-f">Location</div>
-        <div class="tab-inactive-f">Images</div>
-        <div class="tab-inactive-f">Document</div>
-      </div>
-      <!-- Tab Location Friend-->
-      <!-- <div class="tab-location-f"></div> -->
-      <div class="wrap-location">
-        <div class="location w-100">
-          <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.centerF">
-            <l-tile-layer :url="url"></l-tile-layer>
-            <l-marker :lat-lng="this.$store.state.centerF" ></l-marker>
-          </l-map>
+
+        <!-- Box Send Chat -->
+        <div class="wrap-send-chat">
+          <!-- Input Messages -->
+          <div class="wrap-input w-100 h-100 d-flex align-items-center">
+            <input type="text" placeholder="Type your message..." v-model="chat" @keyup.enter="handleChat">
+            <img src="../../assets/plus.svg" alt="plus">
+            <img src="../../assets/emoji.svg" alt="emoji">
+            <img src="../../assets/image.svg" alt="image">
+          </div>
         </div>
+
+        <!-- Menu Chat -->
+        <!-- <div class="menu-profile position-absolute"></div> -->
       </div>
+
+      <!-- Profile Friends -->
+      <section class="position-absolute d-flex flex-column" :class="activeProfileFriend === 1 ? 'profile-f-active':'profile-f-inactive'">
+        <!-- Username Friend -->
+        <div class="wrap-username-f d-flex w-100 justify-content-center position-relative" @click="activateProfileFriend">
+          <img src="../../assets/back.svg" alt="back" class=" position-absolute">
+          <div class="username-f">{{this.$store.state.usernameF}}</div>
+        </div>
+        <!-- Photo Profile Friend -->
+        <div class="container-profile-f d-flex justify-content-center">
+          <div class="wrap-profile-f align-self-center">
+            <!-- <img src="../../assets/calvin-flores.png" alt="profile"> -->
+            <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="profile">
+          </div>
+        </div>
+        <!-- Name Friend -->
+        <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
+          <div class="name-status-f">
+            <div class="name-f">{{this.$store.state.nameF}}</div>
+            <div class="status-f">Online</div>
+          </div>
+          <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
+        </div>
+        <!-- Phone Number -->
+        <div class="wrap-phone-f">
+          <div class="text-phone">Phone number</div>
+          <div class="phone-number">{{this.$store.state.phoneF}}</div>
+        </div>
+        <!-- Misc/Document Tab -->
+        <div class="wrap-doc d-flex w-100 justify-content-between align-items-center ">
+          <div class="tab-active-f">Location</div>
+          <div class="tab-inactive-f">Images</div>
+          <div class="tab-inactive-f">Document</div>
+        </div>
+        <!-- Tab Location Friend-->
+        <!-- <div class="tab-location-f"></div> -->
+        <div class="wrap-location">
+          <div class="location w-100">
+            <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.centerF">
+              <l-tile-layer :url="url"></l-tile-layer>
+              <l-marker :lat-lng="this.$store.state.centerF" ></l-marker>
+            </l-map>
+          </div>
+        </div>
+      </section>
+
     </section>
+
   </div>
 </template>
 
@@ -337,6 +475,13 @@ export default {
     }
   },
   methods: {
+    // Close Chat
+    closeChat () {
+      if (this.selected === 1) {
+        this.selected--
+        // this.$store.commit('REMOVE_RECEIVER')
+      }
+    },
     // Maps
     getLocation () {
       this.$getLocation({ enableHighAccuracy: true })
@@ -947,7 +1092,6 @@ input[type=radio] {
 
 // Right Side
 .right-side {
-  // width: 100%;
   height: 100vh;
   background: #FAFAFA;
   border-left: 1px solid #E5E5E5;
@@ -1579,6 +1723,82 @@ input[type=radio] {
 
   // Right Side
   .right-side {
+    width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+
+  .left-side {
+    width: 100%!important;
+    position: absolute!important;
+    z-index: 10;
+    background-color: rgb(255, 255, 255);
+    top: 0;
+  }
+
+  .right-side {
+    display: none;
+  }
+
+  .right-side-2-active {
+    display: block!important;
+    width: 100%!important;
+    z-index: 20;
+    flex-grow: 0;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+
+  .body-chat {
+    background-color: #FAFAFA;
+  }
+
+  .header-chat {
+    padding: 28px 28px 28px 0;
+  }
+
+  .wrap-name-status {
+    .name {
+      width: 100%;
+    }
+  }
+
+  .icon-2-back {
+    margin: 0 28px 0 28px;
+  }
+
+  .right-side-2-inactive {
+    display: block!important;
+    width: 100%!important;
+    z-index: 20;
+    flex-grow: 0;
+    top: 0;
+    right: -100vw;
+    height: 100%;
+  }
+}
+
+@media (max-width: 425px) {
+
+  .wrap-send-chat {
+    padding: 30px;
+    .wrap-input {
+      img {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 350px) {
+
+  .profile-f-active {
+    width: 100%;
+  }
+
+  .profile-f-inactive {
     width: 100%;
   }
 }
