@@ -345,7 +345,8 @@ export default {
           this.$store.commit('SET_LOCATION', coordinates)
           const position = {
             lat: coordinates.lat,
-            lng: coordinates.lng
+            lng: coordinates.lng,
+            status: 'Online'
           }
           axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, position)
             .then((res) => {
@@ -580,12 +581,21 @@ export default {
     },
     // Log out My Profile
     logout () {
-      localStorage.removeItem('token')
-      localStorage.removeItem('id')
-      this.$store.commit('REMOVE_ALL')
-      this.removeAll()
-      this.$router.push('/login')
-      Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
+      axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { status: 'Offline' })
+        .then((res) => {
+          console.log('User Logout')
+          console.log(res.data.result)
+          localStorage.removeItem('token')
+          localStorage.removeItem('id')
+          this.$store.commit('REMOVE_ALL')
+          this.removeAll()
+          this.$router.push('/login')
+          Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
+        })
+        .catch((err) => {
+          console.log('User Failed Logout')
+          console.log(err.response.data.err)
+        })
     },
     // Show and Hide Menu (Beside Title Telegram)
     activateMenu () {

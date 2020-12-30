@@ -232,4 +232,19 @@ button:hover {
   color: #7E98DF;
 }
 
+@media (min-height: 910px) {
+  .container-fluid {
+    height: 100vh;
+  }
+}
+
+@media (max-width: 500px) {
+  .container-fluid {
+    padding: 40px 10px;
+  }
+  .box-auth {
+    padding: 40px 30px;
+  }
+}
+
 </style>

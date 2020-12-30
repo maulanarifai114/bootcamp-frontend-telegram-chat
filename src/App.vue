@@ -85,7 +85,7 @@ input:focus {
 }
 
 body {
-  font-family: 'Rubik';
+  font-family: 'Rubik', 'Arial', sans-serif;
 }
 
 button {

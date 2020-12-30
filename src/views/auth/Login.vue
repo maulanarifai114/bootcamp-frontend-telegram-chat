@@ -53,16 +53,17 @@ export default {
     }
   },
   methods: {
-    getLocation () {
+    getLocationAndStatus () {
       this.$getLocation({ enableHighAccuracy: true })
         .then(coordinates => {
           console.log(coordinates)
           this.$store.commit('SET_LOCATION', coordinates)
-          const position = {
+          const positionStatus = {
             lat: coordinates.lat,
-            lng: coordinates.lng
+            lng: coordinates.lng,
+            status: 'Online'
           }
-          axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, position)
+          axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, positionStatus)
             .then((res) => {
               console.log(res.data.result)
             })
@@ -84,7 +85,7 @@ export default {
           localStorage.setItem('id', res.data.result.id)
           localStorage.setItem('token', res.data.result.token)
           this.$store.commit('SET_SENDER', res.data.result)
-          this.getLocation()
+          this.getLocationAndStatus()
           Swal.fire('Success Login', 'Let\'s chat your friends', 'success')
           this.$router.push('/room')
         })
@@ -105,7 +106,6 @@ export default {
 .container-fluid {
   padding: 100px 0;
   background: #F6F6F6;
-  // height: 100vh;
 }
 
 .space {
@@ -244,6 +244,15 @@ button:hover {
 @media (min-height: 910px) {
   .container-fluid {
     height: 100vh;
+  }
+}
+
+@media (max-width: 500px) {
+  .container-fluid {
+    padding: 40px 10px;
+  }
+  .box-auth {
+    padding: 40px 30px;
   }
 }
 

@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // My Profile (Sender)
+    status: '',
     senderId: null || localStorage.getItem('id'),
     token: null || localStorage.getItem('token'),
     fullName: '',
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     img: '',
     center: [0, 0],
     // Friend Profile (Receiver)
+    statusF: '',
     receiverId: null,
     imgF: '',
     usernameF: '',
@@ -27,6 +29,7 @@ export default new Vuex.Store({
     // Remove All
     REMOVE_ALL (state) {
       // My Profile (Sender)
+      state.status = ''
       state.senderId = null
       state.token = null
       state.fullName = ''
@@ -34,14 +37,15 @@ export default new Vuex.Store({
       state.phone = ''
       state.bio = ''
       state.img = ''
-      state.center = []
+      state.center = [0, 0]
       // Friend Profile (Receiver)
+      state.statusF = ''
       state.receiverId = 0
       state.imgF = ''
       state.usernameF = ''
       state.nameF = ''
       state.phoneF = ''
-      state.centerF = []
+      state.centerF = [0, 0]
     },
     // Receiver
     SET_RECEIVER (state, data) {
@@ -58,6 +62,7 @@ export default new Vuex.Store({
     },
     // Sender
     SET_SENDER (state, data) {
+      state.status = 'Online'
       state.senderId = data.id
       state.token = data.token
       state.fullName = data.fullName
