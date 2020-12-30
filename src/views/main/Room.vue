@@ -379,8 +379,10 @@ export default {
       axios.get(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`)
         .then((res) => {
           const user = res.data.result[0]
+          const token = localStorage.getItem('token')
           console.log(user)
           this.$store.commit('SET_SENDER', user)
+          this.$store.commit('SET_TOKEN', token)
           this.id = user.id
           this.img = user.img
           this.phone = user.phone
@@ -627,6 +629,14 @@ export default {
       data.imgSender = this.$store.state.img
       console.log(data)
       this.allmessages.push(data)
+      if (data.senderId !== this.$store.state.receiverId) {
+        axios.get(`${process.env.VUE_APP_BASE_URL}user/${data.senderId}`)
+          .then((res) => {
+            this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
+              timeout: 3000
+            })
+          })
+      }
     })
   }
 }
