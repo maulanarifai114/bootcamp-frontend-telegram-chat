@@ -53,6 +53,27 @@ export default {
     }
   },
   methods: {
+    getLocation () {
+      this.$getLocation({ enableHighAccuracy: true })
+        .then(coordinates => {
+          console.log(coordinates)
+          this.$store.commit('SET_LOCATION', coordinates)
+          const position = {
+            lat: coordinates.lat,
+            lng: coordinates.lng
+          }
+          axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, position)
+            .then((res) => {
+              console.log(res.data.result)
+            })
+            .catch((err) => {
+              console.log(err.response.data.err)
+            })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     login () {
       const email = this.email
       const password = this.password
@@ -63,6 +84,7 @@ export default {
           localStorage.setItem('id', res.data.result.id)
           localStorage.setItem('token', res.data.result.token)
           this.$store.commit('SET_SENDER', res.data.result)
+          this.getLocation()
           Swal.fire('Success Login', 'Let\'s chat your friends', 'success')
           this.$router.push('/room')
         })

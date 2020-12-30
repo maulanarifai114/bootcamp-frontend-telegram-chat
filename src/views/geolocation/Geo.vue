@@ -4,7 +4,6 @@
       <l-tile-layer :url="url"></l-tile-layer>
       <l-marker :lat-lng="markerLatLng" ></l-marker>
     </l-map>
-    <button @click="getLokasi">Click Location</button>
   </div>
 </template>
 

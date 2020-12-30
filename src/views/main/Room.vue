@@ -223,7 +223,16 @@
       <!-- My Location -->
       <div class="wrap-location">
         <div class="title-location">Location</div>
-        <div class="location w-100"></div>
+        <div class="location w-100">
+          <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.center">
+            <l-tile-layer :url="url"></l-tile-layer>
+            <l-marker :lat-lng="this.$store.state.center" ></l-marker>
+          </l-map>
+        </div>
+      </div>
+      <!-- Log Out -->
+      <div class="wrap-logout">
+        <div class="logout" @click="logout">Log Out</div>
       </div>
     </section>
 
@@ -263,7 +272,12 @@
       <!-- Tab Location Friend-->
       <!-- <div class="tab-location-f"></div> -->
       <div class="wrap-location">
-        <div class="location w-100"></div>
+        <div class="location w-100">
+          <l-map style="height: 100%, width: 100%" :zoom="zoom" :center="this.$store.state.centerF">
+            <l-tile-layer :url="url"></l-tile-layer>
+            <l-marker :lat-lng="this.$store.state.centerF" ></l-marker>
+          </l-map>
+        </div>
       </div>
     </section>
   </div>
@@ -273,12 +287,21 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import io from 'socket.io-client'
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 
 export default {
   name: 'Room',
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
+  },
   data () {
     return {
       socket: io('http://localhost:4000'),
+      // Maps
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      zoom: 16,
       // Left Side
       search: '',
       tab: 'important',
@@ -314,17 +337,37 @@ export default {
     }
   },
   methods: {
+    // Maps
+    getLocation () {
+      this.$getLocation({ enableHighAccuracy: true })
+        .then(coordinates => {
+          console.log(coordinates)
+          this.$store.commit('SET_LOCATION', coordinates)
+          const position = {
+            lat: coordinates.lat,
+            lng: coordinates.lng
+          }
+          axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, position)
+            .then((res) => {
+              console.log(res.data.result)
+            })
+            .catch((err) => {
+              console.log(err.response.data.err)
+            })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     // Get All User
     getAllUser () {
       axios.get(`${process.env.VUE_APP_BASE_URL}user`)
         .then((res) => {
           const allusers = res.data.result
-          // console.log(allusers)
           let user
           for (user of allusers) {
             user.isSender = this.$store.state.senderId
             this.alluser.push(user)
-            // console.log(user)
           }
         })
         .catch((err) => {
@@ -336,7 +379,7 @@ export default {
       axios.get(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`)
         .then((res) => {
           const user = res.data.result[0]
-          // console.log(user)
+          console.log(user)
           this.$store.commit('SET_SENDER', user)
           this.id = user.id
           this.img = user.img
@@ -369,6 +412,7 @@ export default {
     handleChatList (item) {
       this.selected = 1
       this.$store.commit('SET_RECEIVER', item)
+      this.$store.commit('SET_RECEIVER_LOC', item)
       this.allmessages = []
       axios.get(`${process.env.VUE_APP_BASE_URL}user/msg`)
         .then((res) => {
@@ -514,6 +558,33 @@ export default {
           })
       }
     },
+    removeAll () {
+      // Chat List
+      this.alluser = []
+      this.allmessages = []
+      // My Profile
+      this.senderId = ''
+      this.img = ''
+      this.phone = ''
+      this.fullName = ''
+      this.username = ''
+      this.bio = ''
+      // Profile Friends
+      this.usernameF = ''
+      this.phoneF = ''
+      this.nameF = ''
+      this.imgF = ''
+      this.receiverId = ''
+    },
+    // Log out My Profile
+    logout () {
+      localStorage.removeItem('token')
+      localStorage.removeItem('id')
+      this.$store.commit('REMOVE_ALL')
+      this.removeAll()
+      this.$router.push('/login')
+      Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
+    },
     // Show and Hide Menu (Beside Title Telegram)
     activateMenu () {
       if (this.activeMenu === 0) {
@@ -537,11 +608,17 @@ export default {
       } else if (this.activeProfile > 0) {
         this.activeProfile--
       }
+    },
+    // Delete Attr Leaflet
+    delAttrLeaflet () {
+      document.getElementsByClassName('leaflet-control-attribution')[0].style.display = 'none'
     }
   },
   mounted () {
     this.getAllUser()
     this.getUserById()
+    this.getLocation()
+    this.delAttrLeaflet()
     this.socket.on('sendBack', (data) => {
       console.log('ini sendback')
       data.isReceiver = this.$store.state.receiverId
@@ -880,6 +957,19 @@ input[type=radio] {
 
 .wrap-name-status {
   padding: 9px 0;
+  .name {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: -0.165px;
+    color: #232323;
+    width: 250px;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+  }
 }
 
 .menu-profile {
@@ -1278,7 +1368,23 @@ input[type=radio] {
   }
 }
 
-// Friends Profile
+.wrap-logout {
+  margin: 0 0 28px 0;
+  .logout {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 23px;
+    color: #7E98DF;
+    cursor: pointer;
+  }
+  .logout:hover {
+    opacity: .8;
+  }
+}
+
+// Profile Friends
 .profile-f-active {
   width: 350px;
   background-color: white;
