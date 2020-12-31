@@ -18,7 +18,7 @@ export default new Vuex.Store({
     center: [0, 0],
     // Friend Profile (Receiver)
     statusF: '',
-    receiverId: null,
+    receiverId: '',
     imgF: '',
     usernameF: '',
     nameF: '',
@@ -40,7 +40,7 @@ export default new Vuex.Store({
       state.center = [0, 0]
       // Friend Profile (Receiver)
       state.statusF = ''
-      state.receiverId = 0
+      state.receiverId = ''
       state.imgF = ''
       state.usernameF = ''
       state.nameF = ''
@@ -62,7 +62,7 @@ export default new Vuex.Store({
     },
     REMOVE_RECEIVER (state) {
       state.statusF = ''
-      state.receiverId = 0
+      state.receiverId = ''
       state.imgF = ''
       state.usernameF = ''
       state.nameF = ''

@@ -479,7 +479,7 @@ export default {
     closeChat () {
       if (this.selected === 1) {
         this.selected--
-        // this.$store.commit('REMOVE_RECEIVER')
+        this.$store.commit('REMOVE_RECEIVER')
       }
     },
     // Maps
@@ -784,7 +784,14 @@ export default {
       data.imgSender = this.$store.state.img
       console.log(data)
       this.allmessages.push(data)
-      if (data.senderId !== this.$store.state.receiverId) {
+      if (this.$store.state.receiverId === '' && data.receiverId === this.$store.state.senderId) {
+        axios.get(`${process.env.VUE_APP_BASE_URL}user/${data.senderId}`)
+          .then((res) => {
+            this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
+              timeout: 3000
+            })
+          })
+      } else if (data.receiverId === this.$store.state.senderId && data.senderId !== this.$store.state.receiverId) {
         axios.get(`${process.env.VUE_APP_BASE_URL}user/${data.senderId}`)
           .then((res) => {
             this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
