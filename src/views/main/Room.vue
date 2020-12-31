@@ -177,7 +177,7 @@
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between ">
             <div class="name">{{this.$store.state.nameF}}</div>
-            <div class="status">Online</div>
+            <div class="status">{{this.$store.state.statusF}}</div>
           </div>
           <!-- Icon Menu -->
           <div class="wrap-menu d-flex flex-grow-1 justify-content-end align-items-center">
@@ -258,7 +258,7 @@
         <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
           <div class="name-status-f">
             <div class="name-f">{{this.$store.state.nameF}}</div>
-            <div class="status-f">Online</div>
+            <div class="status-f">{{this.$store.state.statusF}}</div>
           </div>
           <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
         </div>
@@ -310,7 +310,7 @@
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between " @click="activateProfileFriend">
             <div class="name">{{this.$store.state.nameF}}</div>
-            <div class="status">Online</div>
+            <div class="status">{{this.$store.state.statusF}}</div>
           </div>
           <!-- Icon Menu -->
           <!-- <div class="wrap-menu d-flex flex-grow-1 justify-content-end align-items-center">
@@ -396,7 +396,7 @@
         <div class="wrap-name-f w-100 d-flex justify-content-between align-items-center">
           <div class="name-status-f">
             <div class="name-f">{{this.$store.state.nameF}}</div>
-            <div class="status-f">Online</div>
+            <div class="status-f">{{this.$store.state.statusF}}</div>
           </div>
           <img src="../../assets/chat.svg" alt="chat" @click="activateProfileFriend">
         </div>
@@ -569,6 +569,14 @@ export default {
       this.$store.commit('SET_RECEIVER', item)
       this.$store.commit('SET_RECEIVER_LOC', item)
       this.allmessages = []
+      axios.get(`${process.env.VUE_APP_BASE_URL}user/${this.$store.state.receiverId}`)
+        .then((res) => {
+          console.log(res.data.result)
+          this.$store.commit('SET_RECEIVER_STATUS', res.data.result[0].status)
+        })
+        .catch((err) => {
+          console.log(err.response.data.err)
+        })
       axios.get(`${process.env.VUE_APP_BASE_URL}user/msg`)
         .then((res) => {
           const allmsg = res.data.result

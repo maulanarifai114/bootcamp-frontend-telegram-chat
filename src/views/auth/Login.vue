@@ -247,9 +247,9 @@ button:hover {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 575px) {
   .container-fluid {
-    padding: 40px 10px;
+    padding: 40px 20px;
   }
   .box-auth {
     padding: 40px 30px;

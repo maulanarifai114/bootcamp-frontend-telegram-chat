@@ -60,6 +60,9 @@ export default new Vuex.Store({
       state.centerF.push(data.lat)
       state.centerF.push(data.lng)
     },
+    SET_RECEIVER_STATUS (state, data) {
+      state.statusF = data
+    },
     REMOVE_RECEIVER (state) {
       state.statusF = ''
       state.receiverId = ''
