@@ -32,7 +32,7 @@
 
       <!-- Title Telegram -->
       <div class="wrap-title d-flex w-100 justify-content-between">
-        <h1 class="title" @click="activateProfile">Telegram</h1>
+        <h1 class="title" @click="activateProfile">Telegrum</h1>
         <!-- Menu -->
         <img src="../../assets/menu.svg" alt="menu" @click="activateMenu">
       </div>
