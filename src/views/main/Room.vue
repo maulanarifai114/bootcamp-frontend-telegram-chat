@@ -294,11 +294,18 @@
         <!-- Header -->
         <div class="header-chat d-flex">
           <!-- Icon Back -->
-          <img src="../../assets/back.svg" alt="back" class="icon-2-back" @click="closeChat">
+          <div class="container-space">
+            <div class="space-back" @click="closeChat"></div>
+          </div>
+          <img src="../../assets/back.svg" alt="back" @click="closeChat">
+          <div class="container-space">
+            <div class="space-back" @click="closeChat"></div>
+          </div>
           <!-- Photo Profile -->
-          <div class="wrap-img" @click="activateProfileFriend">
-            <!-- <img src="../../assets/default.svg" alt="photo"> -->
-            <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="photo">
+          <div class="container-img">
+            <div class="wrap-img" @click="activateProfileFriend">
+              <img :src="this.$store.state.imgF === '' ? require(`../../assets/default.svg`) : this.$store.state.imgF" alt="photo">
+            </div>
           </div>
           <!-- Name and status -->
           <div class="wrap-name-status d-flex flex-column justify-content-between " @click="activateProfileFriend">
@@ -1744,6 +1751,10 @@ input[type=radio] {
     top: 0;
   }
 
+  .search {
+    width: 100%;
+  }
+
   .right-side {
     display: none;
   }
@@ -1763,13 +1774,26 @@ input[type=radio] {
   }
 
   .header-chat {
-    padding: 28px 28px 28px 0;
+    padding: 28px 0;
+  }
+
+  .container-img {
+    margin: 0 15px 0 0;
+    .wrap-img {
+      margin: 0;
+    }
   }
 
   .wrap-name-status {
+    width: 100%;
     .name {
       width: 100%;
     }
+  }
+
+  .space-back {
+    width: 28px;
+    height: 100%;
   }
 
   .icon-2-back {
