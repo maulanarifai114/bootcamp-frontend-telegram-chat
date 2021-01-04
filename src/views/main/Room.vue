@@ -749,6 +749,7 @@ export default {
           localStorage.removeItem('id')
           this.$store.commit('REMOVE_ALL')
           this.removeAll()
+          this.socket.close()
           this.$router.push('/login')
           Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
         })
@@ -805,6 +806,9 @@ export default {
             this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
               timeout: 3000
             })
+            // this.$toast('if pertama', {
+            //   timeout: 3000
+            // })
           })
       } else if (data.receiverId === this.$store.state.senderId && data.senderId !== this.$store.state.receiverId) {
         axios.get(`${process.env.VUE_APP_BASE_URL}user/${data.senderId}`)
@@ -812,6 +816,9 @@ export default {
             this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
               timeout: 3000
             })
+            // this.$toast('else if kedua', {
+            //   timeout: 3000
+            // })
           })
       }
     })
