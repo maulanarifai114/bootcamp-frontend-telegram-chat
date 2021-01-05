@@ -87,6 +87,13 @@ export default {
           this.$store.commit('SET_SENDER', res.data.result)
           this.getLocationAndStatus()
           Swal.fire('Success Login', 'Let\'s chat your friends', 'success')
+          axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { status: 'Online' })
+            .then((res) => {
+              console.log(res.data.result)
+            })
+            .catch((err) => {
+              console.log(err.response.data.err)
+            })
           this.$router.push('/room')
         })
         .catch((err) => {
