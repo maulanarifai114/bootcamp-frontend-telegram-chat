@@ -7,20 +7,24 @@
       <h2 class=" align-self-start">Hi, Welcome Back</h2>
       <div class="space"></div>
       <!-- Form -->
-      <form @submit.prevent="login">
+      <form @submit.prevent="login" class=" d-flex flex-column">
         <!-- Email -->
         <label for="email" class=" align-self-start">Email</label>
-        <input type="email" id="email" v-model="email" maxlength="64" required>
+        <input :class="this.errorEmail === 1 ? 'bottom-red': '' " @input="checkEmail" @blur="this.errorEmail = 0" type="email" id="email" v-model="email" maxlength="64" placeholder="Enter your email, ex: telegrum@gmail.com" required>
+        <div class=" w-100 mb-1" v-if="this.errorEmail === 1"></div>
+        <h6 class=" align-self-start" v-if="this.errorEmail === 1">Email format is wrong!</h6>
         <div class="space"></div>
         <!-- Password -->
         <label for="password" class=" align-self-start">Password</label>
-        <input type="password" id="password" v-model="password" minlength="8" maxlength="64" required>
+        <input :class="this.errorPass === 1 ? 'bottom-red': '' " @input="checkPass" @blur="this.errorPass = 0" type="password" id="password" v-model="password" minlength="8" maxlength="64" placeholder="Enter your password, min 8 char" required>
+        <div class=" w-100 mb-1" v-if="this.errorPass === 1"></div>
+        <h6 class=" align-self-start" v-if="this.errorPass === 1">Password must be 8 character</h6>
         <div class="space"></div>
         <!-- Forgot Password -->
         <h3 class=" align-self-end">Forgot Password</h3>
         <div class="space"></div>
         <!-- Button Login -->
-        <button type="submit">Login</button>
+        <BtnAuth title="Login"/>
         <div class="space"></div>
       </form>
       <!-- Text Muted -->
@@ -31,7 +35,7 @@
       </div>
       <div class="space"></div>
       <!-- Button Google -->
-      <button class="google" @click.prevent="">Google</button>
+      <BtnGoogle/>
       <div class="space"></div>
       <!-- Sign Up -->
       <h5>Don’t have an account? <span @click="goSignup">Sign Up</span></h5>
@@ -43,16 +47,38 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import BtnAuth from '../../components/auth/base/BtnAuth'
+import BtnGoogle from '../../components/auth/base/BtnGoogle'
 
 export default {
   name: 'Login',
+  components: {
+    BtnAuth,
+    BtnGoogle
+  },
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      errorEmail: 0,
+      errorPass: 0
     }
   },
   methods: {
+    checkEmail () {
+      if (!this.email.includes('@')) {
+        this.errorEmail = 1
+      } else {
+        this.errorEmail = 0
+      }
+    },
+    checkPass () {
+      if (this.password.length < 8) {
+        this.errorPass = 1
+      } else {
+        this.errorPass = 0
+      }
+    },
     getLocationAndStatus () {
       this.$getLocation({ enableHighAccuracy: true })
         .then(coordinates => {
@@ -183,6 +209,20 @@ h5 {
   }
 }
 
+.bottom-red {
+  border-bottom: 1px solid #FF5B37;
+}
+
+h6 {
+  text-align: center;
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FF5B37;
+}
+
 .line-muted {
   height: 1px;
   background-color: #848484;
@@ -214,38 +254,8 @@ input {
   width: 100%;
 }
 
-#password {
-  letter-spacing: 5px;
-}
-
-button {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  color: #FFFFFF;
-  width: 100%;
-  height: 60px;
-  background: #7E98DF;
-  border-radius: 70px;
-}
-
-button:hover {
-  opacity: .8;
-}
-
-.google {
-  background: #FFFFFF;
-  border: 1px solid #7E98DF;
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  color: #7E98DF;
+input::placeholder {
+  color: rgba(35, 35, 35, 0.2);
 }
 
 @media (min-height: 910px) {
