@@ -10,15 +10,15 @@
       <form @submit.prevent="login" class=" d-flex flex-column">
         <!-- Email -->
         <label for="email" class=" align-self-start">Email</label>
-        <input :class="this.errorEmail === 1 ? 'bottom-red': '' " @input="checkEmail" @blur="this.errorEmail = 0" type="email" id="email" v-model="email" maxlength="64" placeholder="Enter your email, ex: telegrum@gmail.com" required>
-        <div class=" w-100 mb-1" v-if="this.errorEmail === 1"></div>
-        <h6 class=" align-self-start" v-if="this.errorEmail === 1">Email format is wrong!</h6>
+        <input :class="errorEmail === 1 ? 'bottom-red': '' " @input="checkEmail" @blur="errorEmail = 0" type="email" id="email" v-model="email" maxlength="64" placeholder="Enter your email, ex: telegrum@gmail.com" required>
+        <div class=" w-100 mb-1" v-if="errorEmail === 1"></div>
+        <h6 class=" align-self-start" v-if="errorEmail === 1">Email format is wrong!</h6>
         <div class="space"></div>
         <!-- Password -->
         <label for="password" class=" align-self-start">Password</label>
-        <input :class="this.errorPass === 1 ? 'bottom-red': '' " @input="checkPass" @blur="this.errorPass = 0" type="password" id="password" v-model="password" minlength="8" maxlength="64" placeholder="Enter your password, min 8 char" required>
-        <div class=" w-100 mb-1" v-if="this.errorPass === 1"></div>
-        <h6 class=" align-self-start" v-if="this.errorPass === 1">Password must be 8 character</h6>
+        <input :class="errorPass === 1 ? 'bottom-red': '' " @input="checkPass" @blur="errorPass = 0" type="password" id="password" v-model="password" minlength="8" maxlength="64" placeholder="Enter your password, min 8 char" required>
+        <div class=" w-100 mb-1" v-if="errorPass === 1"></div>
+        <h6 class=" align-self-start" v-if="errorPass === 1">Password must be 8 character</h6>
         <div class="space"></div>
         <!-- Forgot Password -->
         <h3 class=" align-self-end">Forgot Password</h3>
@@ -51,6 +51,7 @@ import BtnAuth from '../../components/auth/base/BtnAuth'
 import BtnGoogle from '../../components/auth/base/BtnGoogle'
 
 export default {
+  title: 'Login',
   name: 'Login',
   components: {
     BtnAuth,

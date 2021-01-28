@@ -7,6 +7,20 @@
 <script>
 export default {
   name: 'BtnGoogle'
+  // data () {
+  //   return {
+  //     clientId: process.env.VUE_APP_KEY
+  //   }
+  // },
+  // methods: {
+  //   OnGoogleAuthSuccess (idToken) {
+  //     console.log(idToken)
+  //     // Receive the idToken and make your magic with the backend
+  //   },
+  //   OnGoogleAuthFail (error) {
+  //     console.log(error)
+  //   }
+  // }
 }
 </script>
 

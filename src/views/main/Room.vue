@@ -297,7 +297,7 @@
           <div class="container-space">
             <div class="space-back" @click="closeChat"></div>
           </div>
-          <img src="../../assets/back.svg" alt="back" @click="closeChat">
+          <img class="icon-back" src="../../assets/back.svg" alt="back" @click="closeChat">
           <div class="container-space">
             <div class="space-back" @click="closeChat"></div>
           </div>
@@ -435,6 +435,7 @@ import io from 'socket.io-client'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 
 export default {
+  title: 'Telegrum',
   name: 'Room',
   components: {
     LMap,
@@ -806,9 +807,6 @@ export default {
             this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
               timeout: 3000
             })
-            // this.$toast('if pertama', {
-            //   timeout: 3000
-            // })
           })
       } else if (data.receiverId === this.$store.state.senderId && data.senderId !== this.$store.state.receiverId) {
         axios.get(`${process.env.VUE_APP_BASE_URL}user/${data.senderId}`)
@@ -816,9 +814,6 @@ export default {
             this.$toast(`${res.data.result[0].fullName} : ${data.msg}`, {
               timeout: 3000
             })
-            // this.$toast('else if kedua', {
-            //   timeout: 3000
-            // })
           })
       }
     })
@@ -960,6 +955,7 @@ input[type=radio] {
   height: 60px;
   background: #FAFAFA;
   border-radius: 15px;
+  padding: 20px 0;
   img {
     margin: 0 10px 0 20px;
   }
@@ -1148,6 +1144,10 @@ input[type=radio] {
   height: 120px;
 }
 
+.icon-back {
+  width: 14px;
+}
+
 .wrap-name-status {
   padding: 9px 0;
   .name {
@@ -1159,9 +1159,6 @@ input[type=radio] {
     letter-spacing: -0.165px;
     color: #232323;
     width: 250px;
-    // white-space: nowrap;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
   }
 }
 
@@ -1839,6 +1836,14 @@ input[type=radio] {
 }
 
 @media (max-width: 350px) {
+
+  .profile-active {
+    width: 100%;
+  }
+
+  .profile-inactive {
+    width: 100%;
+  }
 
   .profile-f-active {
     width: 100%;

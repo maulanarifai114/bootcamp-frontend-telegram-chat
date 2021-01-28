@@ -15,7 +15,7 @@
       <form @submit.prevent="signup" class=" d-flex flex-column">
         <!-- Full Name -->
         <label for="name" class=" align-self-start">Name</label>
-        <input :class="this.errorName === 1 ? 'bottom-red': '' " @input="checkName" type="email" id="name" v-model="fullName" maxlength="64" placeholder="Enter your full name, ex: John Cena" required>
+        <input :class="this.errorName === 1 ? 'bottom-red': '' " @input="checkName" type="text" id="name" v-model="fullName" maxlength="64" placeholder="Enter your full name, ex: John Doe" required>
         <div class=" w-100 mb-1" v-if="this.errorName === 1"></div>
         <h6 class=" align-self-start" v-if="this.errorName === 1">Do you have a name? Please input here</h6>
         <div class="space"></div>
@@ -55,7 +55,8 @@ import BtnAuth from '../../components/auth/base/BtnAuth'
 import BtnGoogle from '../../components/auth/base/BtnGoogle'
 
 export default {
-  name: 'Login',
+  title: 'Sign Up',
+  name: 'SignUp',
   components: {
     BtnAuth,
     BtnGoogle
