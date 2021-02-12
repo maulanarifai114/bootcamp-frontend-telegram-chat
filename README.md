@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">Telegrum - Chat with easier and faster</h1>
   <a href="https://github.com/maulanarifai114/frontend-telegram-chat">
-    <img src="https://i.postimg.cc/jSV2pRgm/desktop.png"  width="200px" alt="Logo">
+    <img src="https://i.postimg.cc/Vmvtb6jf/desktop.png"  alt="Desktop">
   </a>
 </p>
 
