@@ -742,6 +742,7 @@ export default {
     },
     // Log out My Profile
     logout () {
+      this.$router.push('/login')
       if (localStorage.getItem('id')) {
         axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { status: 'Offline' })
           .then((res) => {
