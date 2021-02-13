@@ -444,7 +444,7 @@ export default {
   },
   data () {
     return {
-      socket: io('http://localhost:4000'),
+      socket: io(`${process.env.VUE_APP_SOCKET}`),
       // Maps
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       zoom: 16,
