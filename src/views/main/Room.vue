@@ -756,6 +756,7 @@ export default {
             Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
           })
           .catch((err) => {
+            this.$router.push('/login')
             console.log('User Failed Logout')
             console.log(err.response.data.err)
           })
