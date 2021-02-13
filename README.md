@@ -79,8 +79,8 @@ npm install
 3. Add .env file at root folder project, and add following
 
 ```sh
-VUE_APP_SERVICE_API = YOUR_HOST_NAME
-VUE_APP_ACCESS_TOKEN_KEY = YOUR_ACCESS_TOKEN_KEY
+VUE_APP_BASE_URL = YOUR_API_VERSION EX: 'http://localhost:4000/v1/'
+VUE_APP_SOCKET = YOUR_API_URL EX: 'http://localhost:4000'
 ```
 
 4. Run the project

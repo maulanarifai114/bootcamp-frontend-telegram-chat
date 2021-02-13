@@ -742,22 +742,27 @@ export default {
     },
     // Log out My Profile
     logout () {
-      axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { status: 'Offline' })
-        .then((res) => {
-          console.log('User Logout')
-          console.log(res.data.result)
-          localStorage.removeItem('token')
-          localStorage.removeItem('id')
-          this.$store.commit('REMOVE_ALL')
-          this.removeAll()
-          this.socket.close()
-          this.$router.push('/login')
-          Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
-        })
-        .catch((err) => {
-          console.log('User Failed Logout')
-          console.log(err.response.data.err)
-        })
+      if (localStorage.getItem('id')) {
+        axios.put(`${process.env.VUE_APP_BASE_URL}user/${localStorage.getItem('id')}`, { status: 'Offline' })
+          .then((res) => {
+            console.log('User Logout')
+            console.log(res.data.result)
+            localStorage.removeItem('token')
+            localStorage.removeItem('id')
+            this.$store.commit('REMOVE_ALL')
+            this.removeAll()
+            this.socket.close()
+            this.$router.push('/login')
+            Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
+          })
+          .catch((err) => {
+            console.log('User Failed Logout')
+            console.log(err.response.data.err)
+          })
+      } else {
+        this.$router.push('/login')
+        Swal.fire('Success Logout', 'Comeback anytime you want', 'success')
+      }
     },
     // Show and Hide Menu (Beside Title Telegram)
     activateMenu () {
